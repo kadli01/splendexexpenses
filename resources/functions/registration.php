@@ -67,9 +67,11 @@ if (isset($_POST['signup'])) {
 				$id_result->execute();
 				$user_id = $id_result->fetch();
 				$_SESSION['user_id'] = $user_id[0];
+				$_SESSION['is_logged_in'] = true;
 				var_dump($_SESSION['user_id']);
 				header('location: ../views/account.php');
 			} else {
+				$_SESSION['is_logged_in'] = false;
 				$error_message = "Failed to register";
 				header('location: ../views/index.php');
 			}

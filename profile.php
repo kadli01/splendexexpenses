@@ -7,15 +7,36 @@
 
 	<title>Splendex Expenses</title>
 
-	<link rel="stylesheet" href="public/assets/css/bootstrap.css">
-	<link rel="stylesheet" href="public/assets/css/shards.css">
-	<link rel="stylesheet" href="public/assets/css/font-awesome.css">
+	<link rel="stylesheet" href="../../public/assets/css/bootstrap.css">
+	<link rel="stylesheet" href="../../public/assets/css/shards.css">
+	<link rel="stylesheet" href="../../public/assets/css/font-awesome.css">
 
-	<link rel="stylesheet" href="public/assets/css/style.css">
+	<link rel="stylesheet" href="../../public/assets/css/style.css">
 </head>
 <body>
 
-	<?php include('resources/include/header.php'); ?>
+	<header>
+		<nav class="navbar navbar-expand-lg bg-dark">
+		<div class="container">
+			<a class="navbar-brand" href="account.html">
+				Splendex Expenses
+			</a>
+			<button class="navbar-toggler" id="nav-icon" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-icon-bar"></span>
+				<span class="navbar-icon-bar"></span>
+				<span class="navbar-icon-bar"></span>
+				<span class="navbar-icon-bar"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link" href="account.html">Accounts</a>
+					<a class="nav-item nav-link" href="profile.html">My Profile</a>
+					<a class="nav-item nav-link" href="index.html">Logout</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	</header>
 	
 	<section class="form">
 		<div class="container">
@@ -56,6 +77,9 @@
 		</div>
 	</section>
 	
-	<?php include('resources/include/scripts.php'); ?>
+	<script src="../../public/assets/js/jquery-1.12.4.js"></script>
+	<script src="../../public/assets/js/popper.min.js"></script>
+	<script src="../../public/assets/js/bootstrap.js"></script>
+	<script src="../../public/assets/js/shards.js"></script>
 </body>
 </html>

@@ -15,18 +15,15 @@
 </head>
 <?php 
 session_start();
-if(!isset($_SESSION['user_id'])){
+if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
 	header('location: index.php');
 	exit();
-} else {
-	$user_id = $_SESSION['user_id'];
-	unset($_SESSION['user_id']);
 }
 ?>
 <body>
 
 	<?php include('resources/include/header.php'); ?>
-
+	
 	<section class="accounts">
 		<div class="container">
 			<div class="row">
