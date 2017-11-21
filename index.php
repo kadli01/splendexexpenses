@@ -29,7 +29,7 @@
 							<form  method="post">
 								<div class="form-group">
 									<label for="email">Email</label>
-									<input type="email" name="email" class="form-control">
+									<input type="email" name="email" class="form-control" value="<?php if(isset($_POST['email'])) {echo $_POST['email'];} ?>">
 								</div>
 								<div class="form-group">
 									<label for="password">Password</label>
