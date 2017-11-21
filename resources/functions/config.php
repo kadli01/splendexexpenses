@@ -2,5 +2,5 @@
 $host = 'localhost';
 $dbname = 'splendex_expenses';
 $user = 'root';
-$pass = '123456';
+$pass = 'admin';
 ?>

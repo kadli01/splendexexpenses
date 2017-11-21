@@ -7,18 +7,19 @@
 
 	<title>Splendex Expenses</title>
 
-	<link rel="stylesheet" href="../../public/assets/css/bootstrap.css">
-	<link rel="stylesheet" href="../../public/assets/css/shards.css">
-	<link rel="stylesheet" href="../../public/assets/css/font-awesome.css">
+	<link rel="stylesheet" href="public/assets/css/bootstrap.css">
+	<link rel="stylesheet" href="public/assets/css/shards.css">
+	<link rel="stylesheet" href="public/assets/css/font-awesome.css">
 
-	<link rel="stylesheet" href="../../public/assets/css/style.css">
+	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
+<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 <body>
 
 	<header>
 		<nav class="navbar navbar-expand-lg bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="account.html">
+			<a class="navbar-brand" href="account.php">
 				Splendex Expenses
 			</a>
 			<button class="navbar-toggler" id="nav-icon" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

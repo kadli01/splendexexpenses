@@ -13,6 +13,7 @@
 
 	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
+<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 <body>
 
 	<?php include('resources/include/header.php'); ?>
