@@ -13,17 +13,11 @@
 
 	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
-<?php 
-session_start();
-if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
-	header('location: index.php');
-	exit();
-}
-?>
+<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 <body>
 
 	<?php include('resources/include/header.php'); ?>
-	
+
 	<section class="accounts">
 		<div class="container">
 			<div class="row">
