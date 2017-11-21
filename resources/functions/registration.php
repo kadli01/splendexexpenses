@@ -50,9 +50,9 @@ if (isset($_POST['signup'])) {
 		$item = $result->fetch();
 		if ($item[0] == $reg_email) {
 			$error_message = "This email address is already registerd.";
-			header('location: ../views/index.php');
+			header('location: ../../index.php');
 		} elseif(isset($error_message)) {
-			header('location: ../views/index.php');
+			header('location: ../../index.php');
 		} else {
 			$pw_hash = password_hash($reg_password, PASSWORD_BCRYPT);
 			$insert = $db->prepare("INSERT INTO users(email, password, created_at, updated_at) 
@@ -69,11 +69,11 @@ if (isset($_POST['signup'])) {
 				$_SESSION['user_id'] = $user_id[0];
 				$_SESSION['is_logged_in'] = true;
 				var_dump($_SESSION['user_id']);
-				header('location: ../views/account.php');
+				header('location: ../../account.php');
 			} else {
 				$_SESSION['is_logged_in'] = false;
 				$error_message = "Failed to register";
-				header('location: ../views/index.php');
+				header('location: ../../index.php');
 			}
 		}
 		$_SESSION['error_message'] = $error_message;
