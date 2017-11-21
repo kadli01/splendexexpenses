@@ -7,12 +7,12 @@
 
 	<title>Splendex Expenses</title>
 
-	<link rel="stylesheet" href="../../public/assets/css/bootstrap.css">
-	<link rel="stylesheet" href="../../public/assets/css/shards.css">
-	<link rel="stylesheet" href="../../public/assets/css/style.css">
+	<link rel="stylesheet" href="public/assets/css/bootstrap.css">
+	<link rel="stylesheet" href="public/assets/css/shards.css">
+	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
 <body>
-	<?php session_start(); include('../functions/login.php');?>
+	<?php session_start(); include('resources/functions/login.php');?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>
@@ -85,9 +85,6 @@
 
 
 	
-	<script src="../../public/assets/js/jquery-1.12.4.js"></script>
-	<script src="../../public/assets/js/popper.min.js"></script>
-	<script src="../../public/assets/js/bootstrap.js"></script>
-	<script src="../../public/assets/js/shards.js"></script>
+<?php include('resources/include/scripts.php'); ?>
 </body>
 </html>
