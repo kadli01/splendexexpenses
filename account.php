@@ -15,12 +15,9 @@
 </head>
 <?php 
 session_start();
-if(!isset($_SESSION['user_id'])){
+if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
 	header('location: index.php');
 	exit();
-} else {
-	$user_id = $_SESSION['user_id'];
-	unset($_SESSION['user_id']);
 }
 ?>
 <body>
@@ -28,7 +25,7 @@ if(!isset($_SESSION['user_id'])){
 	<header>
 		<nav class="navbar navbar-expand-lg bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="account.html">
+			<a class="navbar-brand" href="account.php">
 				Splendex Expenses
 			</a>
 			<button class="navbar-toggler" id="nav-icon" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +36,9 @@ if(!isset($_SESSION['user_id'])){
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="account.html">Accounts</a>
-					<a class="nav-item nav-link" href="profile.html">My Profile</a>
-					<a class="nav-item nav-link" href="index.html">Logout</a>
+					<a class="nav-item nav-link" href="account.php">Accounts</a>
+					<a class="nav-item nav-link" href="profile.php">My Profile</a>
+					<a class="nav-item nav-link" href="index.php">Logout</a>
 				</div>
 			</div>
 		</div>
