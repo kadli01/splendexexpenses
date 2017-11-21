@@ -75,8 +75,8 @@ function getAccounts(){
 	$account_result->execute();
 	$accounts = $account_result->fetchAll(PDO::FETCH_ASSOC);
 	$expenses = getExpenses($accounts);	
-	var_dump($accounts);
-	var_dump($expenses);
+	//var_dump($accounts);
+	//var_dump($expenses);
 	return $accounts;
 }
 
