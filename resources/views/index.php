@@ -12,10 +12,6 @@
 	<link rel="stylesheet" href="../../public/assets/css/style.css">
 </head>
 <body>
-<<<<<<< HEAD
-
-=======
->>>>>>> 768e0ecde0794bdaf915f44c31a18535e8777a81
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>
@@ -27,22 +23,6 @@
 						</div>
 						<div class="item__text">
 							<p>Use your existing account to sign in.</p>
-<<<<<<< HEAD
-						</div>
-						<div class="item__form">
-							<form action="../functions/login.php" method="post" >
-								<div class="form-group">
-									<label for="">Email</label>
-									<input type="email" class="form-control" name="email">
-								</div>
-								<div class="form-group">
-									<label for="">Password</label>
-									<input type="password" class="form-control" name="password">
-								</div>
-								<input type="submit" class="btn btn-primary" name="login" value="Login">
-
-								<!--<a href="account.html" class="btn btn-primary float-right">Login</a>-->
-=======
 							<?php include('../functions/login.php'); ?>
 						</div>
 						<div class="item__form">
@@ -56,7 +36,6 @@
 									<input type="password" name="password" class="form-control">
 								</div>
 								<input type="submit" name="bttLogin" class="btn btn-primary float-right" value="Login">
->>>>>>> 768e0ecde0794bdaf915f44c31a18535e8777a81
 							</form>
 						</div>
 					</div>
@@ -66,7 +45,6 @@
 						</div>
 						<div class="item__text">
 							<p>Create a new account now!</p>
-<<<<<<< HEAD
 							<?php
 								session_start();
 								echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
@@ -93,30 +71,6 @@
 									<span class="custom-control-description">I accept the Terms & Conditions</span>
 								</label>
 								<input type="submit" class="btn btn-primary" name="signup" value="Sign Up">
-								<!--<a href="account.html" class="btn btn-primary">Sign Up</a> -->
-=======
-						</div>
-						<div class="item__form">
-							<form action="">
-								<div class="form-group">
-									<label for="">Email</label>
-									<input type="email" class="form-control">
-								</div>
-								<div class="form-group">
-									<label for="">Password</label>
-									<input type="password" class="form-control">
-								</div>
-								<div class="form-group">
-									<label for="">Password again</label>
-									<input type="password" class="form-control">
-								</div>
-								<label class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input" checked>
-									<span class="custom-control-indicator"></span>
-									<span class="custom-control-description">I accept the Terms & Conditions</span>
-								</label>
-								<a href="account.html" class="btn btn-primary">Sign Up</a>
->>>>>>> 768e0ecde0794bdaf915f44c31a18535e8777a81
 							</form>
 						</div>
 					</div>
