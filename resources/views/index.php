@@ -74,7 +74,6 @@
 									<span class="custom-control-description">I accept the Terms & Conditions</span>
 								</label>
 								<input type="submit" class="btn btn-primary" name="signup" value="Sign Up">
-								<!--<a href="account.html" class="btn btn-primary">Sign Up</a> -->
 							</form>
 						</div>
 					</div>
