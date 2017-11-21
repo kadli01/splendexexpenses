@@ -55,7 +55,7 @@
 							?>
 						</div>
 						<div class="item__form">
-							<form action="../functions/registration.php" method="post">
+							<form action="resources/functions/registration.php" method="post">
 								<div class="form-group">
 									<label for="">Email</label>
 									<input type="email" class="form-control" name="reg_email">
