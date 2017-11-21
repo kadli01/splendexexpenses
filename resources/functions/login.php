@@ -28,9 +28,9 @@
 			
 			if($email_item[0] == $email && password_verify($password, $password_item[0]))
 			{
-				header('Location: ../views/account.php');
+				header('Location: account.php');
 			}else {
-				header('Location: ../views/index.php');
+				header('Location: index.php');
 			}
 
 		}

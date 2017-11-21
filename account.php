@@ -7,11 +7,11 @@
 
 	<title>Splendex Expenses</title>
 
-	<link rel="stylesheet" href="../../public/assets/css/bootstrap.css">
-	<link rel="stylesheet" href="../../public/assets/css/shards.css">
-	<link rel="stylesheet" href="../../public/assets/css/font-awesome.css">
+	<link rel="stylesheet" href="public/assets/css/bootstrap.css">
+	<link rel="stylesheet" href="public/assets/css/shards.css">
+	<link rel="stylesheet" href="public/assets/css/font-awesome.css">
 
-	<link rel="stylesheet" href="../../public/assets/css/style.css">
+	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
 <?php 
 session_start();
@@ -25,34 +25,13 @@ if(!isset($_SESSION['user_id'])){
 ?>
 <body>
 
-	<header>
-		<nav class="navbar navbar-expand-lg bg-dark">
-		<div class="container">
-			<a class="navbar-brand" href="account.html">
-				Splendex Expenses
-			</a>
-			<button class="navbar-toggler" id="nav-icon" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-icon-bar"></span>
-				<span class="navbar-icon-bar"></span>
-				<span class="navbar-icon-bar"></span>
-				<span class="navbar-icon-bar"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-				<div class="navbar-nav">
-					<a class="nav-item nav-link" href="account.html">Accounts</a>
-					<a class="nav-item nav-link" href="profile.html">My Profile</a>
-					<a class="nav-item nav-link" href="index.html">Logout</a>
-				</div>
-			</div>
-		</div>
-	</nav>
-	</header>
+	<?php include('resources/include/header.php'); ?>
 
 	<section class="accounts">
 		<div class="container">
 			<div class="row">
 				<div class="col-3">
-					<a href="new-account.html">
+					<a href="new-account.php">
 						<div class="accounts__card first text-center">
 							<div class="card__content">
 								<i class="fa fa-plus"></i>
@@ -62,7 +41,7 @@ if(!isset($_SESSION['user_id'])){
 					</a>
 				</div>
 				<div class="col-3">
-					<a href="show.html">
+					<a href="show.php">
 						<div class="accounts__card">
 							<div class="card__content">
 								<img src="http://via.placeholder.com/100x100" class="img-fluid">
@@ -78,7 +57,7 @@ if(!isset($_SESSION['user_id'])){
 					</a>
 				</div>
 				<div class="col-3">
-					<a href="show.html">
+					<a href="show.php">
 						<div class="accounts__card">
 							<div class="card__content">
 								<img src="http://via.placeholder.com/100x100" class="img-fluid">
@@ -94,7 +73,7 @@ if(!isset($_SESSION['user_id'])){
 					</a>
 				</div>
 				<div class="col-3">
-					<a href="show.html">
+					<a href="show.php">
 						<div class="accounts__card">
 							<div class="card__content">
 								<img src="http://via.placeholder.com/100x100" class="img-fluid">
@@ -114,9 +93,6 @@ if(!isset($_SESSION['user_id'])){
 	</section>
 
 	
-	<script src="../../public/assets/js/jquery-1.12.4.js"></script>
-	<script src="../../public/assets/js/popper.min.js"></script>
-	<script src="../../public/assets/js/bootstrap.js"></script>
-	<script src="../../public/assets/js/shards.js"></script>
+	<?php include('resources/include/scripts.php'); ?>
 </body>
 </html>
