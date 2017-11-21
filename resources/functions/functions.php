@@ -61,7 +61,7 @@ if(isset($_POST['updatePwdBtn'])){
 		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Password updated successfully!</div>';
 		
     }else{
-    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">The given data dosen\'t match!</div>';	
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The given data dosen\'t match!</div>';	
     }
 }
 
@@ -75,8 +75,8 @@ function getAccounts(){
 	$account_result->execute();
 	$accounts = $account_result->fetchAll(PDO::FETCH_ASSOC);
 	$expenses = getExpenses($accounts);	
-	var_dump($accounts);
-	var_dump($expenses);
+	//var_dump($accounts);
+	//var_dump($expenses);
 	return $accounts;
 }
 
