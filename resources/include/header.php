@@ -14,7 +14,7 @@
 				<div class="navbar-nav">
 					<a class="nav-item nav-link" href="account.php">Accounts</a>
 					<a class="nav-item nav-link" href="profile.php">My Profile</a>
-					<a class="nav-item nav-link" href="functions/logout.php">Logout</a>
+					<a class="nav-item nav-link" href="resources/functions/logout.php">Logout</a>
 				</div>
 			</div>
 		</div>
