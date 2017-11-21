@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="../../public/assets/css/style.css">
 </head>
 <body>
-	<?php include('../functions/login.php'); ?>
+	<?php session_start(); include('../functions/login.php');?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>

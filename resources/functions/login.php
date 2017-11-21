@@ -17,14 +17,20 @@
 		    $password_result->execute();
 		    $password_item = $password_result->fetch();
 
+			$id_result = $db->prepare("SELECT user_id FROM users WHERE email = ?");
+			$id_result->bindParam(1, $email, PDO::PARAM_STR);
+			$id_result->execute();
+			$user_id = $id_result->fetch();
+			$_SESSION['user_id'] = $user_id[0];
+		
+
 			
 			
 			if($email_item[0] == $email && password_verify($password, $password_item[0]))
 			{
-
-				header('Location: ../views/account.html');
+				header('Location: ../views/account.php');
 			}else {
-					header('Location: ../views/index.php');
+				header('Location: ../views/index.php');
 			}
 
 		}
