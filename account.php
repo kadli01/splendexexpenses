@@ -13,7 +13,8 @@
 
 	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
-<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
+<?php include('resources/functions/functions.php'); isLoggedIn(); 
+$accounts = getAccounts(); ?>
 <body>
 
 	<?php include('resources/include/header.php'); ?>
@@ -31,7 +32,28 @@
 						</div>
 					</a>
 				</div>
-				<div class="col-3">
+				<?php foreach ($accounts as $account) {
+					
+				
+				echo '<div class="col-3">';
+					echo '<a href="show.php">';
+						echo '<div class="accounts__card">';
+							echo '<div class="card__content">';
+
+								echo '<img src="http://via.placeholder.com/100x100" class="img-fluid">';
+								echo '<p>' . $account['account_name'] . '</p>';
+								echo '<span>' . $account['total'] . '</span>';
+								echo '<div class="content__icons">';
+									echo '<i class="fa fa-user"></i>';
+									echo '<i class="fa fa-user"></i>';
+									echo '<i class="fa fa-user"></i>';
+								echo '</div>';
+							echo '</div>';
+						echo '</div>';
+					echo '</a>';
+				echo '</div>';
+				} ?>
+				<!--<div class="col-3">
 					<a href="show.php">
 						<div class="accounts__card">
 							<div class="card__content">
@@ -78,7 +100,7 @@
 							</div>
 						</div>
 					</a>
-				</div>
+				</div>-->
 			</div>
 		</div>
 	</section>
