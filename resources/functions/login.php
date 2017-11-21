@@ -1,11 +1,11 @@
 <?php 
-	session_start();
 	if(isset($_POST["bttLogin"]))
 		{
 			require('connection.php');
 
 			$email = $_POST["email"];
 			$password = $_POST["password"];
+
 
 			$email_result = $db->prepare("SELECT email FROM users WHERE email = ?");
 		    $email_result->bindParam(1, $email, PDO::PARAM_STR);
@@ -21,10 +21,10 @@
 			
 			if($email_item[0] == $email && password_verify($password, $password_item[0]))
 			{
+
 				header('Location: ../views/account.html');
 			}else {
-				header('Location: ../views/index.php');
-
+					header('Location: ../views/index.php');
 			}
 
 		}

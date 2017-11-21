@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="../../public/assets/css/style.css">
 </head>
 <body>
+	<?php include('../functions/login.php'); ?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>
@@ -23,7 +24,6 @@
 						</div>
 						<div class="item__text">
 							<p>Use your existing account to sign in.</p>
-							<?php include('../functions/login.php'); ?>
 						</div>
 						<div class="item__form">
 							<form  method="post">
@@ -46,9 +46,12 @@
 						<div class="item__text">
 							<p>Create a new account now!</p>
 							<?php
-								session_start();
-								echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
-								unset($_SESSION['error_message']);
+								if(isset($_SESSION['error_message']))
+								{
+									session_start();
+									echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
+									unset($_SESSION['error_message']);
+								}
 							?>
 						</div>
 						<div class="item__form">
