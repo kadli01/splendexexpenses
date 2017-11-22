@@ -1,5 +1,6 @@
 <?php include('resources/include/head.php'); ?>
 	<?php session_start(); include('resources/functions/login.php'); ?>
+	<?php //phpinfo(); ?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>
@@ -35,8 +36,8 @@
 							<?php
 								if(isset($_SESSION['errorMessage']))
 								{
-									echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
-									unset($_SESSION['error_message']);
+									echo '<p style="color: red">' . $_SESSION['errorMessage'] . "</p>";
+									unset($_SESSION['errorMessage']);
 								}
 							?>
 						</div>
@@ -48,11 +49,11 @@
 								</div>
 								<div class="form-group">
 									<label for="">Password</label>
-									<input type="password" class="form-control" name="reg_password">
+									<input type="password" class="form-control" name="regPassword">
 								</div>
 								<div class="form-group">
 									<label for="">Password again</label>
-									<input type="password" class="form-control" name="reg_password_again">
+									<input type="password" class="form-control" name="regPasswordAgain">
 								</div>
 								<label class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input" checked name="terms">

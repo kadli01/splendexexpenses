@@ -44,9 +44,8 @@ if (isset($_POST['signup'])) {
 
 	try{
 		$result = $db->prepare("SELECT email FROM users 
-			WHERE email = ?");
-		$result->bindParam(1, $regEmail, PDO::PARAM_STR);
-		$result->execute();
+								WHERE email = ?");
+		$result->execute([$regEmail]);
 		$item = $result->fetch();
 		if ($item[0] == $regEmail) {
 			$errorMessage = "This email address is already registerd.";
@@ -56,17 +55,14 @@ if (isset($_POST['signup'])) {
 		} else {
 			$pwHash = password_hash($regPassword, PASSWORD_BCRYPT);
 			$insert = $db->prepare("INSERT INTO users(email, password, created_at, updated_at) 
-				VALUES(?, ?, NOW(), NOW())");
-			$insert->bindParam(1, $regEmail, PDO::PARAM_STR);
-			$insert->bindParam(2, $pwHash, PDO::PARAM_STR);
-			$newUser = $insert->execute();
+									VALUES(?, ?, NOW(), NOW())");
+			$newUser = $insert->execute([$regEmail, $pwHash]);
 			if ($newUser) {
 				$errorMessage = "Succcessfully registered.";	
-				$idResult = $db->prepare("SELECT user_Id FROM users WHERE email = ?");
-				$idResult->bindParam(1, $regEmail, PDO::PARAM_STR);
-				$idResult->execute();
+				$idResult = $db->prepare("SELECT user_id FROM users WHERE email = ?");
+				$idResult->execute([$regEmail]);
 				$userId = $idResult->fetch();
-				$_SESSION['userId'] = $userId[0];
+				$_SESSION['user_id'] = $userId[0];
 				$_SESSION['is_logged_in'] = true;
 				var_dump($_SESSION['userId']);
 				header('location: ../../account.php');

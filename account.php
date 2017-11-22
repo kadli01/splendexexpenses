@@ -1,6 +1,7 @@
 
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); 
+//phpinfo();
 $accounts = getAccounts(); ?>
 
 
@@ -20,33 +21,35 @@ $accounts = getAccounts(); ?>
 							</div>
 						</div>
 					</a>
+				</div>	
+				<?php foreach ($accounts as $account): ?>
+				<div class="col-3">
+					<a href="show.php">
+						<div class="accounts__card">
+							<div class="card__content">
+								<img src="http://via.placeholder.com/100x100" class="img-fluid">
+								<p><?php echo $account['account_name']; ?></p>
+								<span><?php 
+									if($account['currency'] === "USD"){
+										if(isset($account['SUM(e.amount)'])) {
+											echo '$' . $account['SUM(e.amount)'];
+										} else { echo '$0'; }
+									} elseif ($account['currency'] === "HUF") {
+										if(isset($account['SUM(e.amount)'])) {
+											echo $account['SUM(e.amount)'] . ' Ft';
+										} else { echo '0 Ft'; }
+									}
+									?></span>
+								<div class="content__icons">
+									<i class="fa fa-user"></i>
+									<i class="fa fa-user"></i>
+									<i class="fa fa-user"></i>
+								</div>
+							</div>
+						</div>
+					</a>
 				</div>
-				<?php foreach ($accounts as $account) {
-					
-				
-				echo '<div class="col-3">';
-					echo '<a href="show.php">';
-						echo '<div class="accounts__card">';
-							echo '<div class="card__content">';
-
-								echo '<img src="http://via.placeholder.com/100x100" class="img-fluid">';
-								echo '<p>' . $account['account_name'] . '</p>';
-								if($account['currency'] === "USD"){
-									echo '<span>$';
-								} else { echo '<span>Ft'; }
-								if(isset($account['SUM(e.amount)'])) {
-										echo $account['SUM(e.amount)'] . '</span>'; 
-								} else { echo '0</span>'; }
-								echo '<div class="content__icons">';
-									echo '<i class="fa fa-user"></i>';
-									echo '<i class="fa fa-user"></i>';
-									echo '<i class="fa fa-user"></i>';
-								echo '</div>';
-							echo '</div>';
-						echo '</div>';
-					echo '</a>';
-				echo '</div>';
-				} ?>
+				<?php endforeach ?>
 				<!--<div class="col-3">
 					<a href="show.php">
 						<div class="accounts__card">
