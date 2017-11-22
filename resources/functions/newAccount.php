@@ -1,7 +1,7 @@
 <?php 
 require('connection.php');
 if (isset($_POST['create'])) {
-	$targetDir = "../../public/uploads";
+	$targetDir = "/public/uploads";
 	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
 	var_dump($targetFile);
 	if (empty($_POST['name'])) {
@@ -36,13 +36,13 @@ if (isset($_POST['create'])) {
 								VALUES(?, ?, ?, NOW(), NOW())");
 		$account = $insert->execute([$name, $currency, $image]);
 		if ($account) {
-			header('location: ../../account.php');
+			header('location: /splendexexpenses/account.php');
 		}
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}
 	} else {
-		header('location: ../../new-account.php');
+		header('location: /splendexexpenses/new-account.php');
 	}
 
 	var_dump($name, $currency, $image);
