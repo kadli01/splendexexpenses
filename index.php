@@ -35,7 +35,6 @@
 							<?php
 								if(isset($_SESSION['error_message']))
 								{
-									session_start();
 									echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
 									unset($_SESSION['error_message']);
 								}

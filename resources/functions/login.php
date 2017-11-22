@@ -7,26 +7,28 @@
 			$password = $_POST["password"];
 
 
-			$email_result = $db->prepare("SELECT email FROM users WHERE email = ?");
-		    $email_result->bindParam(1, $email, PDO::PARAM_STR);
-		    $email_result->execute();
-		    $email_item = $email_result->fetch();
+			$emailResult = $db->prepare("SELECT email FROM users WHERE email = ?");
+		    $emailResult->bindParam(1, $email, PDO::PARAM_STR);
+		    $emailResult->execute();
+		    $emailItem = $emailResult->fetch();
 
-		    $password_result = $db->prepare("SELECT password FROM users WHERE email = ?");
-		    $password_result->bindParam(1, $email, PDO::PARAM_STR);
-		    $password_result->execute();
-		    $password_item = $password_result->fetch();
+		    $passwordResult = $db->prepare("SELECT password FROM users WHERE email = ?");
+		    $passwordResult->bindParam(1, $email, PDO::PARAM_STR);
+		    $passwordResult->execute();
+		    $passwordItem = $passwordResult->fetch();
 
-			$id_result = $db->prepare("SELECT user_id FROM users WHERE email = ?");
-			$id_result->bindParam(1, $email, PDO::PARAM_STR);
-			$id_result->execute();
-			$user_id = $id_result->fetch();
-			$_SESSION['user_id'] = $user_id[0];
+			$idResult = $db->prepare("SELECT user_id FROM users WHERE email = ?");
+			$idResult->bindParam(1, $email, PDO::PARAM_STR);
+			$idResult->execute();
+			$userId = $idResult->fetch();
+			if(isset($userId[0])){
+				$_SESSION['user_id'] = $userId[0];
+			}
 		
 
 			
 			
-			if($email_item[0] == $email && password_verify($password, $password_item[0]))
+			if($emailItem[0] == $email && password_verify($password, $passwordItem[0]))
 			{
 				header('Location: account.php');
 			}else {

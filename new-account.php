@@ -10,12 +10,12 @@
 				<div class="col-4">
 					<form action="">
 						<div class="form-group">
-							<label for="">Account Name</label>
-							<input type="text" class="form-control">
+							<label for="account_name">Account Name</label>
+							<input type="text" name="account_name" class="form-control">
 						</div>
 						<div class="form-group">
-							<label for="">Currency</label>
-							<select name="" id="" class="form-control">
+							<label for="currency">Currency</label>
+							<select name="currency" id="" class="form-control">
 								<option value="">HUF (Ft)</option>
 								<option value="">USD ($)</option>
 							</select>

@@ -5,6 +5,7 @@ $accounts = getAccounts(); ?>
 
 
 
+
 	<?php include('resources/include/header.php'); ?>
 
 	<section class="accounts">

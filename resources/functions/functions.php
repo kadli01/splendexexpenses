@@ -1,95 +1,111 @@
 <?php
 session_start();
+//check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
         header('location: index.php');
         exit();
     }
 }
-
+//get the users email adress from the db
 function returnEmail(){
 	include('connection.php');
 
 	$email = $db->prepare("SELECT email FROM users WHERE user_id = ?");
     $email->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
     $email->execute();
-    $email_item = $email->fetch();
+    $emailItem = $email->fetch();
 
-    echo $email_item[0];
+    echo $emailItem[0];
 }
-
+//get the username of the user from the db
 function returnName(){
 	include('connection.php');
 
-	$user_name = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
-    $user_name->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
-    $user_name->execute();
-    $user_name_item = $user_name->fetch();
+	$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
+    $userName->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
+    $userName->execute();
+    $userNameItem = $userName->fetch();
 
-    echo $user_name_item[0];
+    echo $userNameItem[0];
 }
 
 // update the Basic Info of the user
 if(isset($_POST['updateBasicBtn'])) {
-	include('connection.php');
+	if(empty($_POST['name'])){
+		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
+	}else{
+		include('connection.php');
 
-	$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
-	$updateBasic->bindParam(1, $_POST['name'], PDO::PARAM_STR);
-	$updateBasic->bindParam(2, $_POST['email'], PDO::PARAM_STR);
-	$updateBasic->bindParam(3, $_SESSION['user_id'], PDO::PARAM_INT);
-	$updateBasic->execute();
+		$userEmails = $db->prepare("SELECT email FROM users WHERE email = ?");
+		$userEmails->bindParam(1, $_POST['email'], PDO::PARAM_STR);
+		$userEmails->execute();
+		$userEmailItem = $userEmails->fetchAll();
 
-	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Basic Info updated successfully!</div>';
+		if($userEmailItem[0][0] == $_POST['email']){
+			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The e-mail you entered is already being used!</div>';
+		}else{
+			$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
+			$updateBasic->bindParam(1, $_POST['name'], PDO::PARAM_STR);
+			$updateBasic->bindParam(2, $_POST['email'], PDO::PARAM_STR);
+			$updateBasic->bindParam(3, $_SESSION['user_id'], PDO::PARAM_INT);
+			$updateBasic->execute();
+
+			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Basic Info updated successfully!</div>';
+		}
+	}
 }
 
 //update the password of the user
-if(isset($_POST['updatePwdBtn'])){
-	include('connection.php');
-
+function updatePassword() {
 	$password = $db->prepare("SELECT password FROM users WHERE user_id = ?");
     $password->bindParam(1, $_SESSION['user_id'], PDO::PARAM_STR);
     $password->execute();
-    $password_item = $password->fetch();
+    $passwordItem = $password->fetch();
 
-    if($_POST['oldPwd'] == password_verify($_POST['oldPwd'], $password_item[0]) && $_POST['newPwd'] == $_POST['newPwdAgain']) {
+    //check if the given password is correct and the new passwords match
+    if($_POST['oldPwd'] == password_verify($_POST['oldPwd'], $passwordItem[0]) && $_POST['newPwd'] == $_POST['newPwdAgain']) {
     	//passwords match, initiate update
     	$updatePass = $db->prepare("UPDATE users SET password = ? WHERE user_id = ?");
 		$updatePass->bindParam(1, password_hash($_POST['newPwd'], PASSWORD_BCRYPT), PDO::PARAM_STR);
 		$updatePass->bindParam(2, $_SESSION['user_id'], PDO::PARAM_INT);
 		$updatePass->execute();
 
-		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Password updated successfully!</div>';
+		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Password updated successfully!</div>';
 		
     }else{
-    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The given data dosen\'t match!</div>';	
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The given data dosen\'t match!</div>';	
     }
 }
 
+if(isset($_POST['updatePwdBtn'])) updatePassword();
+
+//get the accounts from the db
 function getAccounts(){
 	include('connection.php');
-	$user_id = ($_SESSION['user_id']);
-	$account_result = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
+	$userId = ($_SESSION['user_id']);
+	$accountResult = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
 									ON a.account_id = ua.account_id
 									WHERE ua.user_id = ?" );
-	$account_result->bindParam(1, $user_id, PDO::PARAM_INT);
-	$account_result->execute();
-	$accounts = $account_result->fetchAll(PDO::FETCH_ASSOC);
+	$accountResult->bindParam(1, $userId, PDO::PARAM_INT);
+	$accountResult->execute();
+	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
 	$expenses = getExpenses($accounts);	
 	//var_dump($accounts);
 	//var_dump($expenses);
 	return $accounts;
 }
 
-
+//get the expenses for the accounts
 function getExpenses($accounts){
 	include('connection.php');
 	$expenses = array();
 	foreach ($accounts as $account) {
-		$expense_result = $db->prepare("SELECT * FROM expenses 
+		$expenseResult = $db->prepare("SELECT * FROM expenses 
 										WHERE account_id = ?" );
-		$expense_result->bindParam(1, $account['account_id'], PDO::PARAM_INT);
-		$expense_result->execute();
-		$expenses += $expense_result->fetchAll(PDO::FETCH_ASSOC);		
+		$expenseResult->bindParam(1, $account['account_id'], PDO::PARAM_INT);
+		$expenseResult->execute();
+		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);		
 	}
 	return $expenses;
 }
