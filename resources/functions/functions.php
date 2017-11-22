@@ -1,5 +1,6 @@
 <?php
 session_start();
+//nclude('connection.php');
 //check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
