@@ -83,16 +83,17 @@ if(isset($_POST['updatePwdBtn'])) updatePassword();
 //get the accounts from the db
 function getAccounts(){
 	include('connection.php');
-	$userId = ($_SESSION['user_id']);
-	$accountResult = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
-									ON a.account_id = ua.account_id
-									WHERE ua.user_id = ?" );
-	$accountResult->bindParam(1, $userId, PDO::PARAM_INT);
+	//$user_id = ($_SESSION['user_id']);
+	//$accountResult = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
+	// 								ON a.account_id = ua.account_id
+	// 								WHERE ua.user_id = ?" );
+	//$accountResult->bindParam(1, $user_id, PDO::PARAM_INT);
+	$accountResult = $db->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
+									ON e.account_id = a.account_id
+									GROUP BY a.account_id");
 	$accountResult->execute();
 	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
-	$expenses = getExpenses($accounts);	
-	//var_dump($accounts);
-	//var_dump($expenses);
+	//$expenses = getExpenses($accounts);	
 	return $accounts;
 }
 
@@ -105,7 +106,19 @@ function getExpenses($accounts){
 										WHERE account_id = ?" );
 		$expenseResult->bindParam(1, $account['account_id'], PDO::PARAM_INT);
 		$expenseResult->execute();
-		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);		
+
+		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);	
+		$account['expenses'] = 	$expenseResult->fetchAll(PDO::FETCH_ASSOC);
+		var_dump($account);
 	}
 	return $expenses;
+}
+
+function getPeoples(){
+	include('connection.php');
+	$peoplesResult = $db->prepare("SELECT user_name FROM users");
+    $peoplesResult->execute();
+    $peoples = $peoplesResult->fetchAll(PDO::FETCH_ASSOC);
+    //var_dump($people);
+    return $peoples;
 }

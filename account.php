@@ -31,7 +31,12 @@ $accounts = getAccounts(); ?>
 
 								echo '<img src="http://via.placeholder.com/100x100" class="img-fluid">';
 								echo '<p>' . $account['account_name'] . '</p>';
-								echo '<span>' . $account['total'] . '</span>';
+								if($account['currency'] === "USD"){
+									echo '<span>$';
+								} else { echo '<span>Ft'; }
+								if(isset($account['SUM(e.amount)'])) {
+										echo $account['SUM(e.amount)'] . '</span>'; 
+								} else { echo '0</span>'; }
 								echo '<div class="content__icons">';
 									echo '<i class="fa fa-user"></i>';
 									echo '<i class="fa fa-user"></i>';
