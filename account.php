@@ -2,9 +2,8 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); 
 //phpinfo();
-$accounts = getAccounts(); ?>
-
-
+$accounts = getAccounts();
+$dir ="public/uploads/"; ?>
 
 
 	<?php include('resources/include/header.php'); ?>
@@ -27,7 +26,12 @@ $accounts = getAccounts(); ?>
 					<a href="show.php">
 						<div class="accounts__card">
 							<div class="card__content">
-								<img src="http://via.placeholder.com/100x100" class="img-fluid">
+								<img src="<?php 
+									if(isset($account['image'])){
+										echo $dir . $account['image'];	
+									} else {
+										echo "http://via.placeholder.com/100x100";
+									}?> " class="img-fluid">
 								<p><?php echo $account['account_name']; ?></p>
 								<span><?php 
 									if($account['currency'] === "USD"){
