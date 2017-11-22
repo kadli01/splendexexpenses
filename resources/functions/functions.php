@@ -1,6 +1,5 @@
 <?php
 session_start();
-//nclude('connection.php');
 //check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
@@ -15,9 +14,9 @@ function returnEmail(){
 	$email = $db->prepare("SELECT email FROM users WHERE user_id = ?");
     $email->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
     $email->execute();
-    $emailItems = $email->fetch();
+    $emailItem = $email->fetch();
 
-    return $emailItems;
+    echo ($emailItem[0]);
 }
 //get the username of the user from the db
 function returnName(){
@@ -28,23 +27,23 @@ function returnName(){
     $userName->execute();
     $userNameItem = $userName->fetch();
 
-    echo $userNameItem[0];
+    echo ($userNameItem[0]);
+
+
 }
 
 // update the Basic Info of the user
-if(isset($_POST['updateBasicBtn'])) {
-	if(empty($_POST['name'])){
-		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
-	}else{
+function updateBasicInfo(){
+	if(isset($_POST['updateBasicBtn'])) {
 		include('connection.php');
+		$emails = $db->prepare("SELECT email FROM users");
+    	$emails->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
+    	$emails->execute();
+    	$emailItems = $emails->fetchAll();
 
-		$userEmails = $db->prepare("SELECT email FROM users WHERE email = ?");
-		$userEmails->bindParam(1, $_POST['email'], PDO::PARAM_STR);
-		$userEmails->execute();
-		$userEmailItem = $userEmails->fetchAll();
 
-		if($userEmailItem[0][0] == $_POST['email']){
-			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The e-mail you entered is already being used!</div>';
+		if(empty($_POST['name'])){
+			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
 		}else{
 			$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
 			$updateBasic->bindParam(1, $_POST['name'], PDO::PARAM_STR);
@@ -52,14 +51,15 @@ if(isset($_POST['updateBasicBtn'])) {
 			$updateBasic->bindParam(3, $_SESSION['user_id'], PDO::PARAM_INT);
 			$updateBasic->execute();
 
-			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Basic Info updated successfully!</div>';
+			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Basic Info updated successfully!</div>';
 		}
 	}
 }
+if(isset($_POST['updateBasicBtn'])) updateBasicInfo();
 
 //update the password of the user
 function updatePassword() {
-	//require('connection.php');
+	include('connection.php');
 	$password = $db->prepare("SELECT password FROM users WHERE user_id = ?");
     $password->bindParam(1, $_SESSION['user_id'], PDO::PARAM_STR);
     $password->execute();
@@ -67,9 +67,12 @@ function updatePassword() {
 
     //check if the given password is correct and the new passwords match
     if($_POST['oldPwd'] == password_verify($_POST['oldPwd'], $passwordItem[0]) && $_POST['newPwd'] == $_POST['newPwdAgain']) {
+
+    	$pwd = password_hash($_POST['newPwd'], PASSWORD_BCRYPT);
+
     	//passwords match, initiate update
     	$updatePass = $db->prepare("UPDATE users SET password = ? WHERE user_id = ?");
-		$updatePass->bindParam(1, password_hash($_POST['newPwd'], PASSWORD_BCRYPT), PDO::PARAM_STR);
+		$updatePass->bindParam(1, $pwd, PDO::PARAM_STR);
 		$updatePass->bindParam(2, $_SESSION['user_id'], PDO::PARAM_INT);
 		$updatePass->execute();
 

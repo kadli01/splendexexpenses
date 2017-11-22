@@ -2,15 +2,21 @@
 	if(isset($_POST["bttLogin"]))
 		{
 			require('connection.php');
-
-			$email = $_POST["email"];
-			$password = $_POST["password"];
+			if(isset($_POST["email"])){
+				$email = $_POST["email"];
+			}
+			if(isset($_POST["password"])){
+				$password = $_POST["password"];
+			}
 
 
 			$emailResult = $db->prepare("SELECT email FROM users WHERE email = ?");
 		    $emailResult->bindParam(1, $email, PDO::PARAM_STR);
 		    $emailResult->execute();
 		    $emailItem = $emailResult->fetch();
+		    if(isset($emailItem[0])){
+		    	$_SESSION['user_email'] = $emailItem[0];
+		    }
 
 		    $passwordResult = $db->prepare("SELECT password FROM users WHERE email = ?");
 		    $passwordResult->bindParam(1, $email, PDO::PARAM_STR);
