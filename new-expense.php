@@ -1,4 +1,4 @@
-
+<?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 
 

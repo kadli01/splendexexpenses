@@ -87,7 +87,7 @@
 										<h4>Expenses</h4>
 										<div class="d-flex">
 											<div class="item">
-												<a href="expense-show.html"><p>Main Course</p></a>
+												<a href="expense-show.php"><p>Main Course</p></a>
 												<span>André paid for all</span>
 												<span class="d-block">2017/11/21</span>
 											</div>
@@ -97,7 +97,7 @@
 										</div>
 										<div class="d-flex">
 											<div class="item">
-												<a href="expense-show.html"><p>Cocktails</p></a>
+												<a href="expense-show.php"><p>Cocktails</p></a>
 												<span>Péter paid for all</span>
 												<span class="d-block">2017/11/21</span>
 											</div>
@@ -107,7 +107,7 @@
 										</div>
 										<div class="d-flex">
 											<div class="item">
-												<a href="expense-show.html"><p>Apperetizers</p></a>
+												<a href="expense-show.php"><p>Apperetizers</p></a>
 												<span>Dani paid for André</span>
 												<span class="d-block">2017/11/21</span>
 											</div>
@@ -115,7 +115,7 @@
 												<p>$80</p>
 											</div>
 										</div>
-										<a href="new-expense.html" class="btn btn-primary">Add New</a>
+										<a href="new-expense.php" class="btn btn-primary">Add New</a>
 									</div>
 								</div>
 							</div>

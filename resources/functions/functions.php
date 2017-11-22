@@ -41,7 +41,6 @@ function updateBasicInfo(){
     	$emails->execute();
     	$emailItems = $emails->fetchAll();
 
-
 		if(empty($_POST['name'])){
 			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
 		}else{
