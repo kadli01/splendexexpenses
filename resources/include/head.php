@@ -9,6 +9,7 @@
 
 	<link rel="stylesheet" href="public/assets/css/bootstrap.css">
 	<link rel="stylesheet" href="public/assets/css/shards.css">
+	<link rel="stylesheet" href="public/assets/css/font-awesome.css">
 	<link rel="stylesheet" href="public/assets/css/style.css">
 </head>
 <body>
