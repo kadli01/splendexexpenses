@@ -1,5 +1,5 @@
 <?php include('resources/include/head.php'); ?>
-	<?php session_start(); include('resources/functions/login.php');?>
+	<?php session_start(); include('resources/functions/login.php'); ?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>
@@ -33,11 +33,11 @@
 						<div class="item__text">
 							<p>Create a new account now!</p>
 							<?php
-								if(isset($_SESSION['error_message']))
+								if(isset($_SESSION['errorMessage']))
 								{
 									session_start();
-									echo '<p style="color: red">' . $_SESSION['error_message'] . "</p>";
-									unset($_SESSION['error_message']);
+									echo '<p style="color: red">' . $_SESSION['errorMessage'] . "</p>";
+									unset($_SESSION['errorMessage']);
 								}
 							?>
 						</div>
@@ -45,7 +45,7 @@
 							<form action="resources/functions/registration.php" method="post">
 								<div class="form-group">
 									<label for="">Email</label>
-									<input type="email" class="form-control" name="reg_email">
+									<input type="email" class="form-control" name="regEmail" value="<?php if(isset($_POST['regEmail'])) echo $_POST['regEmail']; ?>">
 								</div>
 								<div class="form-group">
 									<label for="">Password</label>

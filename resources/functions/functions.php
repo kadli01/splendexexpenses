@@ -67,16 +67,17 @@ if(isset($_POST['updatePwdBtn'])){
 
 function getAccounts(){
 	include('connection.php');
-	$user_id = ($_SESSION['user_id']);
-	$account_result = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
-									ON a.account_id = ua.account_id
-									WHERE ua.user_id = ?" );
-	$account_result->bindParam(1, $user_id, PDO::PARAM_INT);
-	$account_result->execute();
-	$accounts = $account_result->fetchAll(PDO::FETCH_ASSOC);
-	$expenses = getExpenses($accounts);	
-	//var_dump($accounts);
-	//var_dump($expenses);
+	//$user_id = ($_SESSION['user_id']);
+	//$accountResult = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
+	// 								ON a.account_id = ua.account_id
+	// 								WHERE ua.user_id = ?" );
+	//$accountResult->bindParam(1, $user_id, PDO::PARAM_INT);
+	$accountResult = $db->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
+									ON e.account_id = a.account_id
+									GROUP BY a.account_id");
+	$accountResult->execute();
+	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
+	//$expenses = getExpenses($accounts);	
 	return $accounts;
 }
 
@@ -85,11 +86,22 @@ function getExpenses($accounts){
 	include('connection.php');
 	$expenses = array();
 	foreach ($accounts as $account) {
-		$expense_result = $db->prepare("SELECT * FROM expenses 
+		$expenseResult = $db->prepare("SELECT * FROM expenses 
 										WHERE account_id = ?" );
-		$expense_result->bindParam(1, $account['account_id'], PDO::PARAM_INT);
-		$expense_result->execute();
-		$expenses += $expense_result->fetchAll(PDO::FETCH_ASSOC);		
+		$expenseResult->bindParam(1, $account['account_id'], PDO::PARAM_INT);
+		$expenseResult->execute();
+		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);	
+		$account['expenses'] = 	$expenseResult->fetchAll(PDO::FETCH_ASSOC);
+		var_dump($account);
 	}
 	return $expenses;
+}
+
+function getPeoples(){
+	include('connection.php');
+	$peoplesResult = $db->prepare("SELECT user_name FROM users");
+    $peoplesResult->execute();
+    $peoples = $peoplesResult->fetchAll(PDO::FETCH_ASSOC);
+    //var_dump($people);
+    return $peoples;
 }
