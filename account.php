@@ -2,9 +2,15 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); 
 //phpinfo();
+session_start();
 $accounts = getAccounts();
 $dir ="public/uploads/"; ?>
-
+<?php 
+				if (!empty($_SESSION['createError'])) {
+				//echo  '<h5 style="color: red">' . $_SESSION['createError'] . '</h5>';
+					echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['createError'] . '</div>';	
+					unset($_SESSION['createError']);
+			} ?>
 
 	<?php include('resources/include/header.php'); ?>
 
@@ -24,7 +30,7 @@ $dir ="public/uploads/"; ?>
 				<?php foreach ($accounts as $account): ?>
 				<div class="col-3">
 					<a href="show.php">
-						<div class="accounts__card">
+						<div class="accounts__card" style="margin-bottom: 15px">
 							<div class="card__content">
 								<img src="<?php 
 									if(isset($account['image'])){
