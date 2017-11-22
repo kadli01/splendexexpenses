@@ -14,9 +14,9 @@ function returnEmail(){
 	$email = $db->prepare("SELECT email FROM users WHERE user_id = ?");
     $email->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
     $email->execute();
-    $emailItem = $email->fetch();
+    $emailItems = $email->fetch();
 
-    echo $emailItem[0];
+    return $emailItems;
 }
 //get the username of the user from the db
 function returnName(){
@@ -58,6 +58,7 @@ if(isset($_POST['updateBasicBtn'])) {
 
 //update the password of the user
 function updatePassword() {
+	//require('connection.php');
 	$password = $db->prepare("SELECT password FROM users WHERE user_id = ?");
     $password->bindParam(1, $_SESSION['user_id'], PDO::PARAM_STR);
     $password->execute();
