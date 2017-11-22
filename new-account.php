@@ -8,7 +8,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-4">
-					<form action="resources/functions/newAccount.php" method="post">
+					<form action="resources/functions/newAccount.php" method="post" enctype = "multipart/form-data">
 						<div class="form-group">
 							<label for="">Account Name</label>
 							<input type="text" class="form-control" name="name">

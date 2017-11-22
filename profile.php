@@ -17,7 +17,7 @@
 							</div>
 							<div class="form-group">
 								<label for="email">Email</label>
-								<input type="email" name="email" class="form-control" value="<?php returnEmail(); ?>">
+								<input type="email" name="email" class="form-control" value="<?php  returnEmail(); ?>">
 							</div>
 							<input type="submit" name="updateBasicBtn" class="btn btn-primary" value="Change">
 						</div>

@@ -7,6 +7,7 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	}catch(Exception $e)
 	{
+		throw new Exception("Error Processing Request");		
 		echo $e->getMessage();
 	    exit;
 	}
