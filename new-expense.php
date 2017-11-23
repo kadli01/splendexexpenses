@@ -1,7 +1,10 @@
-<?php include('resources/include/head.php'); ?>
-<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-
-
+<?php 
+include('resources/include/head.php'); 
+include('resources/functions/functions.php'); isLoggedIn();
+$accounts = getAccounts();
+$currency = getCurrency();
+if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
+?>
 	<?php include('resources/include/header.php'); ?>
 	
 	<section class="create">
@@ -9,32 +12,32 @@
 			<div class="row">
 				<div class="col-4">
 					<h4>Expense Description</h4>
-					<form action="">
+					<form action="" method="POST">
 						<div class="top">
 							<div class="form-group">
-								<label for="">Expense Name</label>
+								<label for="expenseName">Expense Name</label>
 								<input type="text" name="expenseName" class="form-control">
 							</div>
 							<div class="form-group">
-								<label for="">Currency</label>
-								<select name="" id="" class="form-control">
-									<option value="">HUF (Ft)</option>
+								<label for="expenseCurrency">Currency</label>
+								<select name="expenseCurrency" id="" class="form-control">
+									<?php echo '<option value="">' . $currency[0] . '</option>'; ?>
 								</select>
 							</div>
 							<div class="form-group">
 								<label for="">Amount</label>
-								<input type="text" class="form-control">
+								<input name="amount" type="text" class="form-control">
 							</div>
 							<div class="form-group">
-								<label for="">Date</label>
-								<input type="text" class="form-control" id="datepicker-example">
+								<label for="date">Date</label>
+								<input name="date" type="text" class="form-control" id="datepicker" value="">
 							</div>
 							<div class="form-group">
 								<label for="">Paid by</label>
-								<select name="" id="" class="form-control">
-									<option value="">Péter Varga</option>
-									<option value="">Petres Dániel</option>
-									<option value="">André Timár</option>
+								<select name="paidBy" id="" class="form-control">
+									<?php foreach ($members as $member): ?>
+									<?php echo '<option value="' . $member['user_id'] . '">' . $member["user_name"] . '</option>'; ?>
+									<?php endforeach ?>
 								</select>
 							</div>
 						</div>
@@ -47,7 +50,7 @@
 								<div class="item">
 									<div class="input-group">
 										<input type="text" class="form-control">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
+										<span class="input-group-addon" id="basic-addon1"><?php echo $currency[0] ?></span>
 									</div>
 								</div>
 							</div>
@@ -73,7 +76,7 @@
 									</div>
 								</div>
 							</div>
-							<a href="show.html" class="btn btn-primary">Create</a>
+							<a href="show.php?accountId=<?php echo $_GET["accountId"] ?>" name="createExpenseBtn" class="btn btn-primary">Create</a>
 						</div>
 					</form>
 				</div>
@@ -81,11 +84,14 @@
 		</div>
 	</section>
 	
-	<script>
-	  $('#datepicker-example').datepicker({
-	      calendarWeeks: true,
-	      autoclose: true,
-	      todayHighlight: true
-	  });
-	</script>
 	<?php include('resources/include/scripts.php'); ?>
+	<script>
+	$(function(){
+    	$("#datepicker").datepicker({
+			calendarWeeks: true,
+	    	autoclose: true,
+    		todayHighlight: true,
+    		dateFormat: 'yy/mm/dd',
+    	}).datepicker("setDate", new Date());
+	});
+	</script>
