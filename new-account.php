@@ -15,7 +15,7 @@
 
 			<div class="row">
 				<div class="col-4">
-					<form action="resources/functions/newAccount.php" method="post" enctype = "multipart/form-data">
+					<form action="resources/functions/create-account.php" method="post" enctype = "multipart/form-data">
 						<div class="form-group">
 							<label for="">Account Name</label>
 							<input type="text" class="form-control" name="name">
@@ -34,7 +34,7 @@
 								if ($people['user_name']) { ?>
 								<div>
 									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input">
+										<input type="checkbox" class="custom-control-input" name="people[]" value="<?php echo $people['user_name']; ?>">
 										<span class="custom-control-indicator"></span>
 										<span class="custom-control-description"><?php echo $people['user_name'] ?></span>
 									</label>
