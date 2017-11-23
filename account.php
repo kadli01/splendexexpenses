@@ -6,7 +6,6 @@ $accounts = getAccounts();
 $dir ="public/uploads/"; ?>
 <?php 
 				if (!empty($_SESSION['createError'])) {
-				//echo  '<h5 style="color: red">' . $_SESSION['createError'] . '</h5>';
 					echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['createError'] . '</div>';	
 					unset($_SESSION['createError']);
 			} ?>
