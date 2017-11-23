@@ -85,30 +85,30 @@ function updatePassword() {
 if(isset($_POST['updatePwdBtn'])) updatePassword();
 
 //get the accounts from the db
-function getAccounts(){
+function getAccounts($accId = null){
 	include('connection.php');
-	//$user_id = ($_SESSION['user_id']);
-	//$accountResult = $db->prepare("SELECT * FROM accounts a INNER JOIN users_accounts ua
-	// 								ON a.account_id = ua.account_id
-	// 								WHERE ua.user_id = ?" );
-	//$accountResult->bindParam(1, $user_id, PDO::PARAM_INT);
 	$accountResult = $db->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
 									ON e.account_id = a.account_id
-									GROUP BY a.account_id");
-	$accountResult->execute();
+									GROUP BY a.account_id
+								/*	HAVING a.account_id = ?*/");
+	$accountResult->execute(/*[$accId]*/);
 	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
-	//$expenses = getExpenses($accounts);
+	foreach ($accounts as $key => $value) {
+		unset($accounts[$key]);
+		$new_key = $value['account_id'];
+		$accounts[$new_key] = $value;
+	}
 	return $accounts;
 }
 
 //get the expenses for the accounts
-function getExpenses($acounts){
+function getExpenses($accountId){
 	include('connection.php');
 	$expenses = array();
 	foreach ($accounts as $account) {
 		$expenseResult = $db->prepare("SELECT * FROM expenses 
 										WHERE account_id = ?" );
-		$expenseResult->bindParam(1, $account['account_id'], PDO::PARAM_INT);
+		$expenseResult->bindParam(1, $accountId, PDO::PARAM_INT);
 		$expenseResult->execute();
 
 		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);	
@@ -117,7 +117,7 @@ function getExpenses($acounts){
 	return $expenses;
 }
 
-function getPeoples(){
+function getPeoples($accId = null){
 	include('connection.php');
 	$peoplesResult = $db->prepare("SELECT user_name FROM users");
     $peoplesResult->execute();
@@ -125,3 +125,22 @@ function getPeoples(){
     //var_dump($people);
     return $peoples;
 }
+/*
+function getAccountDetails($accId){
+	include('connection.php');
+	$selectDetails = $db->prepare("SELECT * FROM accounts WHERE account_id = ?");
+    $selectDetails->execute([$accId]);
+    $details = $selectDetails->fetch(PDO::FETCH_ASSOC);
+    var_dump($details);
+    return $details;
+}
+*/
+
+function getMembers($accId){
+	include('connection.php');
+	$selectMembers = $db->prepare("SELECT * FROM users u JOIN users_accounts ua ON u.user_id = ua.user_id WHERE ua.account_id = ?");
+    $selectMembers->execute([$accId]);
+    $members = $selectMembers->fetchAll(PDO::FETCH_ASSOC);
+    return $members;
+}
+
