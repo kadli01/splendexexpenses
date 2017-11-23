@@ -4,10 +4,11 @@
 <?php include('resources/include/header.php'); ?>
 
 <?php $details = getAccounts($_GET['accountId']);
-		$members = getMembers($_GET['accountId']);
-		//$details = getAccountDetails($_GET['accountId']);
-		$accId = $_GET['accountId'];
-		$dir ="public/uploads/";  ?>
+$members = getMembers($_GET['accountId']);		
+$accId = $_GET['accountId'];
+$dir ="public/uploads/";  
+getDebt($accId);
+?>
 	<section class="account-show">
 		<div class="container">
 			<div class="row">
@@ -50,12 +51,20 @@
 										<div class="d-flex">
 											<div class="item">
 												<p><?php echo $member['user_name']; ?></p>
-												<span>Last Paid: Main Course</span>
+												<span>
+												<?php if (getLastPaid($member['user_id'])): ?>
+												Last Paid: <?php echo(getLastPaid($member['user_id'])['expense_name']); ?>
+												
+											<?php else :{
+												echo "Did not pay for anything.";
+											} ?><?php endif ?>
+											 </span>
 											</div>
 											<div class="item">
 												<p>+$45</p>
 											</div>
 										</div>
+										
 										<?php endforeach ?>
 										<!-- <div class="d-flex">
 											<div class="item">
@@ -108,7 +117,7 @@
 										<?php foreach($expenses as $i => $expense): ?>
 										<?php echo '<div class="d-flex">'; ?>
 											<?php echo '<div class="item">'; ?>
-												<?php echo '<a href="expense-show.php"><p>' . $expenses{$i}["expense_name"] . '</p></a>'; ?>
+												<?php echo '<a href="expense-show.php?expenseId='.$expenses{$i}["expense_id"] . '"><p>' . $expenses{$i}["expense_name"] . '</p></a>'; ?>
 												<?php echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>'; ?>
 												<?php echo '<span class="d-block">' . $expenses{$i}['created_at'] .  '</span>'; ?>
 											<?php echo '</div>'; ?>
@@ -140,7 +149,7 @@
 												<p>$80</p>
 											</div>
 										</div> -->
-										<a href="new-expense.php" class="btn btn-primary">Add New</a>
+										<a href="new-expense.php?accountId=<?php echo $_GET['accountId']; ?> "class="btn btn-primary">Add New</a>
 									</div>
 								</div>
 							</div>

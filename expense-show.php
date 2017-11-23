@@ -1,8 +1,9 @@
 
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 <?php include('resources/include/head.php'); ?>
-
-	<?php include('resources/include/header.php'); ?>
+<?php include('resources/include/header.php'); ?>
+<?php $details = getExpenseDetails($_GET['expenseId']); ?>	
+<?php include('resources/functions/connection.php'); ?>
 	
 	<section class="create">
 		<div class="container">
@@ -13,7 +14,7 @@
 						<div class="top">
 							<div class="form-group">
 								<label for="">Expense Name</label>
-								<input type="text" class="form-control" value="Main Course" disabled>
+								<input type="text" class="form-control" value="<?php echo $details['expense_name']; ?>" disabled>
 							</div>
 							<div class="form-group">
 								<label for="">Currency</label>
@@ -23,16 +24,25 @@
 							</div>
 							<div class="form-group">
 								<label for="">Amount</label>
-								<input type="text" class="form-control" value="235" disabled="">
+								<input type="text" class="form-control" value="<?php  echo $details['amount'] ?>" disabled="">
 							</div>
 							<div class="form-group">
 								<label for="">Date</label>
-								<input type="text" class="form-control" value="2017/11/14" disabled="">
+								<input type="text" class="form-control" value="<?php  $time =strtotime($details['created_at']);
+									 echo ( date('Y/m/d',$time));
+								 ?>" disabled="">
 							</div>
 							<div class="form-group">
 								<label for="">Paid by</label>
 								<select name="" id="" class="form-control" disabled="">
-									<option value="">Péter Varga</option>
+									<option value="">
+										<?php 	
+										$select = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
+    									$select->execute([$details['paid_by']]); 
+    									$paidBy = $select->fetch(PDO::FETCH_ASSOC);
+    									echo ( $paidBy['user_name']);
+    									?>	
+    								</option>
 								</select>
 							</div>
 						</div>

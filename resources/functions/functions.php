@@ -140,3 +140,38 @@ function getMembers($accId){
     return $members;
 }
 
+function getLastPaid($userId){
+	include('connection.php');
+	$selectLast = $db->prepare("SELECT * FROM expenses 
+								WHERE paid_by = ?
+								ORDER BY created_at DESC 
+								LIMIT 1");
+    $selectLast->execute([$userId]);
+    $lastPaid = $selectLast->fetch(PDO::FETCH_ASSOC);
+    return $lastPaid;
+}
+
+function getDebt($accId = null){
+	include('connection.php');
+	$selecDebt = $db->prepare("SELECT e.account_id, p.expense_id, p.paid_by, p.paid_for, p.debt
+								FROM paid_for p 
+								JOIN expenses e ON p.expense_id = e.expense_id
+								WHERE e.account_id = ?");
+    $selecDebt->execute([$accId]);
+    $debt = $selecDebt->fetchAll(PDO::FETCH_ASSOC);
+    $total = array();
+    foreach ($debt as $d) {
+    	//var_dump($d);
+    }
+    //var_dump($debt);
+    return $members;
+}
+
+function getExpenseDetails($expenseId){
+	include('connection.php');
+	$selectDetails = $db->prepare("SELECT * FROM expenses WHERE expense_id = ?");
+    $selectDetails->execute([$expenseId]);
+    $details = $selectDetails->fetch(PDO::FETCH_ASSOC);
+   // var_dump($details);
+    return $details;
+}
