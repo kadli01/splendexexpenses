@@ -1,7 +1,6 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 
-
 <?php include('resources/include/header.php'); ?>
 	
 	<section class="account-show">
@@ -95,6 +94,7 @@
 												<p>$234</p>
 											</div>
 										</div>
+										<!--
 										<div class="d-flex">
 											<div class="item">
 												<a href="expense-show.php"><p>Cocktails</p></a>
@@ -105,6 +105,7 @@
 												<p>$123</p>
 											</div>
 										</div>
+
 										<div class="d-flex">
 											<div class="item">
 												<a href="expense-show.php"><p>Apperetizers</p></a>
@@ -115,6 +116,7 @@
 												<p>$80</p>
 											</div>
 										</div>
+											-->
 										<a href="new-expense.php" class="btn btn-primary">Add New</a>
 									</div>
 								</div>

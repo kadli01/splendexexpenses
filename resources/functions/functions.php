@@ -97,12 +97,12 @@ function getAccounts(){
 									GROUP BY a.account_id");
 	$accountResult->execute();
 	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
-	//$expenses = getExpenses($accounts);	
+	//$expenses = getExpenses($accounts);
 	return $accounts;
 }
 
 //get the expenses for the accounts
-function getExpenses($accounts){
+function getExpenses($acounts){
 	include('connection.php');
 	$expenses = array();
 	foreach ($accounts as $account) {
@@ -113,7 +113,6 @@ function getExpenses($accounts){
 
 		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);	
 		$account['expenses'] = 	$expenseResult->fetchAll(PDO::FETCH_ASSOC);
-		var_dump($account);
 	}
 	return $expenses;
 }

@@ -2,7 +2,6 @@
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
 <?php include('resources/include/head.php'); ?>
 <?php $peoples = getPeoples(); ?>
-<?php session_start(); ?>
 			<?php 
 				if (!empty($_SESSION['createError'])) {
 				//echo  '<h5 style="color: red">' . $_SESSION['createError'] . '</h5>';

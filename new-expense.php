@@ -13,7 +13,7 @@
 						<div class="top">
 							<div class="form-group">
 								<label for="">Expense Name</label>
-								<input type="text" class="form-control">
+								<input type="text" name="expenseName" class="form-control">
 							</div>
 							<div class="form-group">
 								<label for="">Currency</label>

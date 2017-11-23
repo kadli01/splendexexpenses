@@ -2,7 +2,6 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); 
 //phpinfo();
-session_start();
 $accounts = getAccounts();
 $dir ="public/uploads/"; ?>
 <?php 
