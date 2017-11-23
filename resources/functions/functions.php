@@ -102,19 +102,14 @@ function getAccounts(){
 }
 
 //get the expenses for the accounts
-function getExpenses($acounts){
+function getExpenses($accountId){
 	include('connection.php');
-	$expenses = array();
-	foreach ($accounts as $account) {
-		$expenseResult = $db->prepare("SELECT * FROM expenses 
-										WHERE account_id = ?" );
-		$expenseResult->bindParam(1, $account['account_id'], PDO::PARAM_INT);
-		$expenseResult->execute();
+	$expense = $db->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ?");
+	$expense->bindParam(1, $accountId, PDO::PARAM_INT);
+	$expense->execute();
+	$expenseResult = $expense->fetchAll(PDO::FETCH_ASSOC);	
 
-		$expenses += $expenseResult->fetchAll(PDO::FETCH_ASSOC);	
-		$account['expenses'] = 	$expenseResult->fetchAll(PDO::FETCH_ASSOC);
-	}
-	return $expenses;
+	return $expenseResult;
 }
 
 function getPeoples(){

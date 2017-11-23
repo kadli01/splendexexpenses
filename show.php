@@ -1,6 +1,7 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-
+<?php $expenses = getExpenses($_GET['accountId']); var_dump($expenses); 
+$names = getName(); //var_dump($names);?>
 <?php include('resources/include/header.php'); ?>
 	
 	<section class="account-show">
@@ -81,19 +82,24 @@
 										</div>
 									</div>
 								</div>
+
 								<div class="tab-pane fade" id="expenses" role="tabpanel" aria-labelledby="expenses-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Expenses</h4>
-										<div class="d-flex">
-											<div class="item">
-												<a href="expense-show.php"><p>Main Course</p></a>
-												<span>André paid for all</span>
-												<span class="d-block">2017/11/21</span>
-											</div>
-											<div class="item">
-												<p>$234</p>
+										<?php if(!empty($expenses)) { ?>
+										<?php foreach($expenses as $i => $expense): ?>
+										<?php echo '<div class="d-flex">'; ?>
+											<?php echo '<div class="item">'; ?>
+												<?php echo '<a href="expense-show.php"><p>' . $expenses{$i}["expense_name"] . '</p></a>'; ?>
+												<?php echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>'; ?>
+												<?php echo '<span class="d-block">' . $expenses{$i}['created_at'] .  '</span>'; ?>
+											<?php echo '</div>'; ?>
+											<?php echo '<div class="item">' ?>
+												<?php echo '<p>' . $expenses{$i}['amount'] . '</p>'; ?>
 											</div>
 										</div>
+									<?php endforeach; ?>
+									<?php }else { echo 'There are no Expenses for this account!<br><br>';} ?>
 										<!--
 										<div class="d-flex">
 											<div class="item">
@@ -115,8 +121,7 @@
 											<div class="item">
 												<p>$80</p>
 											</div>
-										</div>
-											-->
+										</div> -->
 										<a href="new-expense.php" class="btn btn-primary">Add New</a>
 									</div>
 								</div>
