@@ -140,7 +140,7 @@
 												<p>$80</p>
 											</div>
 										</div> -->
-										<a href="new-expense.php" class="btn btn-primary">Add New</a>
+										<a href="new-expense.php?accountId=<?php echo $_GET["accountId"] ?>" class="btn btn-primary">Add New</a>
 									</div>
 								</div>
 							</div>

@@ -106,8 +106,7 @@ function getExpenses($accountId){
 	include('connection.php');
 
 	$expense = $db->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ?");
-	$expense->bindParam(1, $accountId, PDO::PARAM_INT);
-	$expense->execute();
+	$expense->execute([$accountId]);
 	$expenseResult = $expense->fetchAll(PDO::FETCH_ASSOC);	
 
 	return $expenseResult;
@@ -131,7 +130,7 @@ function getAccountDetails($accId){
     return $details;
 }
 */
-
+//get the members of the account from the db
 function getMembers($accId){
 	include('connection.php');
 	$selectMembers = $db->prepare("SELECT * FROM users u JOIN users_accounts ua ON u.user_id = ua.user_id WHERE ua.account_id = ?");
@@ -139,4 +138,24 @@ function getMembers($accId){
     $members = $selectMembers->fetchAll(PDO::FETCH_ASSOC);
     return $members;
 }
+
+function getCurrency() {
+	include('connection.php');
+	$currency = $db->prepare("SELECT currency FROM accounts WHERE account_id = ?");
+	$currency->execute([$_GET['accountId']]);
+	$currencyItem = $currency->fetch();
+	return $currencyItem;
+}
+
+function newExpense() {
+	$paidBy = $_POST['paidBy'];
+	try{
+		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name) VALUES(?, ?)");
+		$expense->execute([$_GET['accountId']], [$_POST['expenseName']]);
+	}catch(Exception $e){
+		echo $e->getMessage();
+	}
+}
+
+if(isset($_POST['createExpenseBtn'])) updatePassword();
 
