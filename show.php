@@ -1,18 +1,34 @@
 <?php include('resources/include/head.php'); ?>
 <?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-<?php $expenses = getExpenses($_GET['accountId']); var_dump($expenses); 
-$names = getName(); //var_dump($names);?>
+<?php $expenses = getExpenses($_GET['accountId']); ?>
 <?php include('resources/include/header.php'); ?>
-	
+
+<?php $details = getAccounts($_GET['accountId']);
+		$members = getMembers($_GET['accountId']);
+		//$details = getAccountDetails($_GET['accountId']);
+		$accId = $_GET['accountId'];
+		$dir ="public/uploads/";  ?>
 	<section class="account-show">
 		<div class="container">
 			<div class="row">
 				<div class="col-6">
 					<div class="show__wrapper">
 						<div class="show__top">
-							<img src="http://via.placeholder.com/100x100">
-							<h3>Dinner</h3>
-							<span>$235</span>
+							<img src="<?php if($details[$accId]['image']){
+								echo $dir.$details[$accId]['image']; 
+							} else {
+								echo "http://via.placeholder.com/100x100";
+							}?>">
+							<h3><?php echo $details[$accId]['account_name'];?></h3>
+							<span><?php 
+								if ($details[$accId]['currency'] === 'USD') {
+									echo "$ ";
+								}
+								echo $details[$accId]['SUM(e.amount)'];
+								if($details[$accId]['currency'] === 'HUF'){
+									echo " Ft";
+							}?></span>
+									
 						</div>
 						<div class="show__nav">
 							<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -30,16 +46,18 @@ $names = getName(); //var_dump($names);?>
 								<div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Balance Summary</h4>
+										<?php foreach ($members as $member): ?>
 										<div class="d-flex">
 											<div class="item">
-												<p>André</p>
+												<p><?php echo $member['user_name']; ?></p>
 												<span>Last Paid: Main Course</span>
 											</div>
 											<div class="item">
 												<p>+$45</p>
 											</div>
 										</div>
-										<div class="d-flex">
+										<?php endforeach ?>
+										<!-- <div class="d-flex">
 											<div class="item">
 												<p>Péter</p>
 												<span>Last Paid: Cocktails</span>
@@ -56,7 +74,7 @@ $names = getName(); //var_dump($names);?>
 											<div class="item">
 												<p>-$185</p>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 								<div class="tab-pane fade" id="owe" role="tabpanel" aria-labelledby="owe-tab">

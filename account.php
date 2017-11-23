@@ -27,7 +27,9 @@ $dir ="public/uploads/"; ?>
 				</div>	
 				<?php foreach ($accounts as $account): ?>
 				<div class="col-3">
+
 					<a href="show.php?accountId=<?php echo $account['account_id'] ?>">
+
 						<div class="accounts__card" style="margin-bottom: 15px">
 							<div class="card__content">
 								<img src="<?php 
