@@ -4,7 +4,8 @@
 <?php include('resources/include/header.php'); ?>
 
 <?php $details = getAccounts($_GET['accountId']);
-$members = getMembers($_GET['accountId']);		
+$members = getMembers($_GET['accountId']);
+$currency = getCurrency();	
 $accId = $_GET['accountId'];
 $dir ="public/uploads/";  
 ?>
@@ -93,20 +94,24 @@ $dir ="public/uploads/";
 								<div class="tab-pane fade" id="expenses" role="tabpanel" aria-labelledby="expenses-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Expenses</h4>
-										<?php if(!empty($expenses)) { ?>
-										<?php foreach($expenses as $i => $expense): ?>
-										<?php echo '<div class="d-flex">'; ?>
-											<?php echo '<div class="item">'; ?>
-												<?php echo '<a href="expense-show.php?expenseId='.$expenses{$i}["expense_id"] . '"><p>' . $expenses{$i}["expense_name"] . '</p></a>'; ?>
-												<?php echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>'; ?>
-												<?php echo '<span class="d-block">' . $expenses{$i}['created_at'] .  '</span>'; ?>
-											<?php echo '</div>'; ?>
-											<?php echo '<div class="item">' ?>
-												<?php echo '<p>' . $expenses{$i}['amount'] . '</p>'; ?>
-											</div>
-										</div>
-									<?php endforeach; ?>
-									<?php }else { echo 'There are no Expenses for this account!<br><br>';} ?>
+										<?php if(!empty($expenses)) {
+											foreach($expenses as $i => $expense):
+												echo '<div class="d-flex">';
+												echo '<div class="item">';
+												echo '<a href="expense-show.php?accountId=' . $_GET["accountId"] . '&' . 'expenseId='.$expenses{$i}["expense_id"] . '"><p>' . $expenses{$i}["expense_name"] . '</p></a>';
+												echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>';
+												echo '<span class="d-block">' . $expenses{$i}['created_at'] .  '</span>';
+												echo '</div>';
+												echo '<div class="item">';
+												if($currency[0] == 'HUF'){
+													echo '<p>' . $expenses{$i}['amount'] . ' Ft' . '</p>';
+												}else{
+													echo '<p>' . ' $' . $expenses{$i}['amount'] . '</p>';
+												}
+												echo '</div>';
+												echo '</div>';
+											endforeach;
+										}else { echo 'There are no Expenses for this account!<br><br>';} ?>
 										<!--
 										<div class="d-flex">
 											<div class="item">

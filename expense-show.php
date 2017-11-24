@@ -1,9 +1,14 @@
 
-<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-<?php include('resources/include/head.php'); ?>
-<?php include('resources/include/header.php'); ?>
-<?php $details = getExpenseDetails($_GET['expenseId']); ?>	
-<?php include('resources/functions/connection.php'); ?>
+<?php 
+include('resources/functions/functions.php'); isLoggedIn();
+include('resources/include/head.php');
+include('resources/include/header.php');
+$details = getExpenseDetails($_GET['expenseId']); 
+$currency = getCurrency();
+$expenseId = $_GET['expenseId'];
+$paidForDetails = getPaidFor($expenseId);
+include('resources/functions/connection.php');
+?>
 	
 	<section class="create">
 		<div class="container">
@@ -48,39 +53,19 @@
 						</div>
 						<div class="bottom">
 							<h4>Paid For:</h4>
-							<div class="d-flex">
-								<div class="item">
-									<p>Péter Varga</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control" value="70" disabled="">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
-									</div>
-								</div>
-							</div>
-							<div class="d-flex">
-								<div class="item">
-									<p>Dániel Petres</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control" value="65" disabled="">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
-									</div>
-								</div>
-							</div>
-							<div class="d-flex">
-								<div class="item">
-									<p>André Timár</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control" value="100" disabled="">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
-									</div>
-								</div>
-							</div>
+							<?php foreach ($paidForDetails as $paidForDetail):
+								echo '<div class="d-flex">';
+								echo '<div class="item">';
+								echo '<p>' . $paidForDetail['user_name'] . '</p>';
+								echo '</div>';
+								echo '<div class="item">';
+								echo '<div class="input-group">';
+								echo '<input type="text" class="form-control" value="' . $paidForDetail['debt'] . '" disabled="">';
+								echo '<span class="input-group-addon" id="basic-addon1"><?php echo $currency[0] ?>' . $currency[0] . '</span>';
+								echo '</div>';
+								echo '</div>';
+								echo '</div>';
+							endforeach; ?>
 						</div>
 					</form>
 				</div>
