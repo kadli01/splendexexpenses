@@ -8,6 +8,7 @@ if(!empty($_SESSION['expenseError'])){
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
 		unset($_SESSION['expenseError']);
 }
+
 ?>
 <?php include('resources/include/header.php'); ?>
 	
