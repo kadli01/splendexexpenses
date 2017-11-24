@@ -130,7 +130,7 @@ function getMembers($accId){
     return $members;
 }
 
-
+//get the last expense the user paid for
 function getLastPaid($userId, $accId){
 	include('connection.php');
 	$selectLast = $db->prepare("SELECT * FROM expenses 
@@ -157,7 +157,7 @@ function getDebt($accId = null){
     //var_dump($debt);
     return $members;
 }
-
+//get details of expenses
 function getExpenseDetails($expenseId){
 	include('connection.php');
 	$selectDetails = $db->prepare("SELECT * FROM expenses WHERE expense_id = ?");
@@ -166,7 +166,7 @@ function getExpenseDetails($expenseId){
    // var_dump($details);
     return $details;
 }
-
+// get the currency of the account
 function getCurrency() {
 	include('connection.php');
 	$currency = $db->prepare("SELECT currency FROM accounts WHERE account_id = ?");
@@ -174,7 +174,7 @@ function getCurrency() {
 	$currencyItem = $currency->fetch();
 	return $currencyItem;
 }
-
+// insert new expense in the db
 function newExpense() {
 	include('connection.php');
 	$paidBy = $_POST['paidBy'];
@@ -187,6 +187,7 @@ function newExpense() {
 			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 		}
+
 }
 
 function getBalance($userId){
@@ -209,4 +210,11 @@ function getBalance($userId){
 
 if(isset($_POST['createExpenseBtn'])) newExpense();
 
+function getPaidFor($expenseId) {
+	include('connection.php');
+	$details = $db->prepare("SELECT pf.paid_for, u.user_name, pf.debt FROM paid_for pf LEFT JOIN users u ON pf.paid_for = u.user_id WHERE expense_id = ?");
+	$details->execute([$expenseId]);
+	$detailsItems = $details->fetchAll();
 
+	return $detailsItems;
+}
