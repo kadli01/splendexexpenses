@@ -131,13 +131,13 @@ function getMembers($accId){
 }
 
 
-function getLastPaid($userId){
+function getLastPaid($userId, $accId){
 	include('connection.php');
 	$selectLast = $db->prepare("SELECT * FROM expenses 
-								WHERE paid_by = ?
+								WHERE paid_by = ? && account_id = ?
 								ORDER BY created_at DESC 
 								LIMIT 1");
-    $selectLast->execute([$userId]);
+    $selectLast->execute([$userId, $accId]);
     $lastPaid = $selectLast->fetch(PDO::FETCH_ASSOC);
     return $lastPaid;
 }

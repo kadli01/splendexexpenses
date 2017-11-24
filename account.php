@@ -4,7 +4,7 @@
 //phpinfo();
 $accounts = getAccounts();
 $dir ="public/uploads/"; ?>
-<?php 
+<?php
 				if (!empty($_SESSION['createError'])) {
 					echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['createError'] . '</div>';	
 					unset($_SESSION['createError']);

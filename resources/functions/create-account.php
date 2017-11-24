@@ -1,3 +1,4 @@
+
 <?php 
 session_start();
 require('connection.php');
@@ -30,35 +31,49 @@ if (isset($_POST['create'])) {
 	}
 	if (!isset($errorMessage)) {
 		try {
-		$insert = $db->prepare("INSERT INTO accounts(account_name, currency, image, created_at, updated_at)
-								VALUES(?, ?, ?, NOW(), NOW())");
-		$account = $insert->execute([$name, $currency, $image]);
-
-		$accId = $db->lastInsertId();
-		addPeople($accId);
-
-		if ($account) {
-			$_SESSION['createError'] = "Successfully added new account.";
-			header('location: /splendexexpenses/account.php');
-		}
+			$insert = $db->prepare("INSERT INTO accounts(account_name, currency, image, created_at, updated_at)
+									VALUES(?, ?, ?, NOW(), NOW())");
+			$account = $insert->execute([$name, $currency, $image]);
+			$accId = $db->lastInsertId();	
+			var_dump($_POST['people']) ;
+			if($_POST['people']) {		
+				if(addPeople($accId)){
+					echo "ok";
+				} 
+			} else {
+				$errorMessage = "Please select people"; 
+			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}
+	}
+	if (!isset($errorMessage)) {
+		$_SESSION['createError'] = "Successfully added new account.";
+		//var_dump($_SESSION);
+		header('location: /splendexexpenses/account.php');
 	} else {
 		$_SESSION['createError'] = $errorMessage;
+		//var_dump($_SESSION);
 		header('location: /splendexexpenses/new-account.php');
 	}
+
 }
 
 function addPeople($accId){
 	require('connection.php');
+	$result = array();
 	foreach ($_POST['people'] as $person) {
 		$selectUserId = $db->prepare("SELECT user_id FROM users WHERE user_name = ?");
 		$selectUserId->execute([$person]);
 		$userId = $selectUserId->fetch();
 
 		$insert = $db->prepare("INSERT INTO users_accounts(user_id, account_id) VALUES(?, ?)");
-		$insert->execute([$userId[0], $accId]);
+		array_push($result, $insert->execute([$userId[0], $accId]));
+	}
+	if (in_array(false, $result)) {
+		return false;
+	} else { 
+		return true;
 	}
 }
 ?>
