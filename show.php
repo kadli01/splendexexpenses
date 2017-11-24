@@ -6,7 +6,7 @@
 <?php $details = getAccounts($_GET['accountId']);
 $members = getMembers($_GET['accountId']);		
 $accId = $_GET['accountId'];
-$dir ="public/uploads/";  
+$dir ="public/uploads/"; 
 ?>
 	<section class="account-show">
 		<div class="container">
@@ -60,7 +60,17 @@ $dir ="public/uploads/";
 											 </span>
 											</div>
 											<div class="item">
-												<p>+$45</p>
+												<p><?php 
+												$balance = getBalance($member['user_id']);
+												$x = $balance['paid'] - $balance[0]['sum(p.debt)'];
+												// var_dump($balance['paid']);
+												// var_dump($balance[0]['sum(p.debt)']);
+												if ($x >= 0) {
+														echo "+" . $x;
+													} else{
+														echo $x;
+													}
+												?></p>
 											</div>
 										</div>
 										<?php endforeach ?>
@@ -69,6 +79,7 @@ $dir ="public/uploads/";
 								<div class="tab-pane fade" id="owe" role="tabpanel" aria-labelledby="owe-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Who Owes What</h4>
+
 										<div class="d-flex">
 											<div class="item">
 												<a href="" data-toggle="modal" data-target="#exampleModal"><p>Péter</p></a>

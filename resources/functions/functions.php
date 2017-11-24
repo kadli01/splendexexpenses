@@ -186,10 +186,25 @@ function newExpense() {
 		foreach ($_POST['paidFor'] as $key => $value) {
 			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-			var_dump($value);
 		}
-		
-		var_dump($expenseId);
+}
+
+function getBalance($userId){
+	include('connection.php');
+	$selectPaid = $db->prepare("SELECT sum(amount) FROM expenses WHERE account_id = ? && paid_by = ?");
+	$selectPaid->execute([$_GET['accountId'], $userId]);
+	$paid = $selectPaid->fetchAll(PDO::FETCH_ASSOC);
+	$selectDebt = $db->prepare("SELECT u.user_name, sum(p.debt) FROM paid_for p
+								LEFT JOIN expenses e
+								ON p.expense_id = e.expense_id 
+								LEFT JOIN users u
+								ON p.paid_for = u.user_id
+								WHERE e.account_id = ? && p.paid_for = ?
+								GROUP BY p.paid_for");
+	$selectDebt->execute([$_GET['accountId'], $userId]);
+	$debt = $selectDebt->fetchAll(PDO::FETCH_ASSOC);
+	$debt['paid'] = $paid[0]['sum(amount)'];
+	return $debt;
 }
 
 if(isset($_POST['createExpenseBtn'])) newExpense();

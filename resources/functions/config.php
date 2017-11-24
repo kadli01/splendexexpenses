@@ -4,6 +4,7 @@ $dbname = 'splendex_expenses';
 $user = 'root';
 $pass = '123456';
 
+
 // class Config {
 // 	public $host = 'localhost';
 // 	public $dbname = 'splendex_expenses';
