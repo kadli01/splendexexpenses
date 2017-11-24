@@ -196,7 +196,7 @@ function newExpense() {
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
 			}
-		} else {	$expenseError = "matek?";
+		} else {	$expenseError = "Numbers don't add up!";
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
@@ -240,19 +240,25 @@ function getPaidFor($expenseId) {
 }
 
 function whoOwesWhat(){
-	include('connection.php');
-	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, sum(pf.debt)
-								FROM paid_for pf 
-								LEFT JOIN users u 
-								ON pf.paid_for = u.user_id 
-								LEFT JOIN expenses e
-								ON pf.expense_id = e.expense_id
-								WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
-								GROUP BY u.user_name, pf.paid_by");
-	$selectWow->execute([$_GET['accountId']]);
-	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
-    array_push($w, $userNameItem);
-    $result[] = $w;
-	}
-	return $result;
+    include('connection.php');
+    $selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, sum(pf.debt)
+                                FROM paid_for pf 
+                                LEFT JOIN users u 
+                                ON pf.paid_for = u.user_id 
+                                LEFT JOIN expenses e
+                                ON pf.expense_id = e.expense_id
+                                WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
+                                GROUP BY u.user_name, pf.paid_by");
+    $selectWow->execute([$_GET['accountId']]);
+    $wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
+    
+    $result = array();
+    foreach ($wow as $w) {
+        $userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
+        $userName->execute([$w['paid_by']]);
+        $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
+        array_push($w, $userNameItem);
+        $result[] = $w;
+    }
+    return $result;
 }
