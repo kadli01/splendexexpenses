@@ -24,7 +24,7 @@ $wow = whoOwesWhat();
 							<h3><?php echo $details[$accId]['account_name'];?></h3>
 							<span><?php 
 								if ($details[$accId]['currency'] === 'USD') {
-									echo "$ ";
+									echo "$";
 								}
 								echo $details[$accId]['SUM(e.amount)'];
 								if($details[$accId]['currency'] === 'HUF'){
