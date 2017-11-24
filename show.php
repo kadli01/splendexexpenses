@@ -110,18 +110,6 @@ $wow = whoOwesWhat();
 											</div>
 										</div>
 										<?php endforeach ?>
-
-
-										<!-- <div class="d-flex">
-											<div class="item">
-												<a href="" data-toggle="modal" data-target="#exampleModal"><p>Dániel</p></a>
-												<span>Owes André</span>
-											</div>
-											<div class="item">
-												<p>$185</p>
-											</div>
-										</div> -->
-										
 									</div>
 								</div>
 
@@ -146,28 +134,6 @@ $wow = whoOwesWhat();
 												echo '</div>';
 											endforeach;
 										}else { echo 'There are no Expenses for this account!<br><br>';} ?>
-										<!--
-										<div class="d-flex">
-											<div class="item">
-												<a href="expense-show.php"><p>Cocktails</p></a>
-												<span>Péter paid for all</span>
-												<span class="d-block">2017/11/21</span>
-											</div>
-											<div class="item">
-												<p>$123</p>
-											</div>
-										</div>
-
-										<div class="d-flex">
-											<div class="item">
-												<a href="expense-show.php"><p>Apperetizers</p></a>
-												<span>Dani paid for André</span>
-												<span class="d-block">2017/11/21</span>
-											</div>
-											<div class="item">
-												<p>$80</p>
-											</div>
-										</div> -->
 										<a href="new-expense.php?accountId=<?php echo $_GET['accountId']; ?>"class="btn btn-primary">Add New</a>
 									</div>
 								</div>

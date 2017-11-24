@@ -251,7 +251,6 @@ function whoOwesWhat(){
 								GROUP BY u.user_name, pf.paid_by");
 	$selectWow->execute([$_GET['accountId']]);
 	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
-	
 	$result = array();
 	foreach ($wow as $w) {
 		$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");

@@ -39,29 +39,6 @@
 									</label>
 								</div>
 								<?php } endforeach ?>
-
-
-								<!-- <div>
-									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input">
-										<span class="custom-control-indicator"></span>
-										<span class="custom-control-description">Péter Varga</span>
-									</label>
-								</div>
-								<div>
-									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input">
-										<span class="custom-control-indicator"></span>
-										<span class="custom-control-description">Dániel Petres</span>
-									</label>
-								</div>
-								<div>
-									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input">
-										<span class="custom-control-indicator"></span>
-										<span class="custom-control-description">André Timár</span>
-									</label>
-								</div> -->
 							</div>
 						</div>
 						<div class="form-group">

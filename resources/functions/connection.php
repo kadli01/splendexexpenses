@@ -1,5 +1,5 @@
 <?php
-		require('config.php');
+	require('config.php');
 	try {
 
 		$db = new PDO('mysql:host=' . $host . ';dbname=' . $dbname, $user, $pass);
