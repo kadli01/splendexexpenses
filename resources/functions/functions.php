@@ -196,7 +196,7 @@ function newExpense() {
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
 			}
-		} else {	$expenseError = "matek?";
+		} else {	$expenseError = "The numbers do not add up";
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
@@ -257,25 +257,8 @@ function whoOwesWhat(){
 		$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
 	    $userName->execute([$w['paid_by']]);
 	    $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
-	    //var_dump($userNameItem['user_name']);
 	    array_push($w, $userNameItem);
-	    //var_dump($w);
 	    $result[] = $w;
-	  //  $w += $userNameItem['user_name'];
 	}
-
-	// foreach ($wow as $key => $value) {
-	// 	$selectPaidBy = $db->prepare("SELECT u.user_name
-	// 						FROM users u
-	// 						LEFT JOIN paid_for pf
-	// 						ON u.user_id = pf.paid_by
-	// 						WHERE pf.paid_by = ?");
-	// 	$selectPaidBy->execute([$value['paid_by']]);
-	// 	$paidBy = $selectPaidBy->fetch(PDO::FETCH_ASSOC);
-	// 	$wow['paidBy'] = $paidBy;
-		
-	// }
-	 //var_dump($wow);
-
 	return $result;
 }
