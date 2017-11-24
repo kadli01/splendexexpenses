@@ -179,8 +179,6 @@ function newExpense() {
 	include('connection.php');
 	$paidBy = $_POST['paidBy'];
 	$members = getMembers($_GET['accountId']);
-	//var_dump($_POST['paidFor'] , $_POST['amount'] , $_POST['paidBy'], $_POST['expenseName']);
-	var_dump(in_array(null, $_POST['paidFor']));
 	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName']) {
 		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
 		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
