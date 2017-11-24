@@ -101,7 +101,12 @@ $wow = whoOwesWhat();
 												<span>Owes <?php echo $w[0]['user_name']; ?></span>
 											</div>
 											<div class="item">
-												<p><?php echo $w['sum(pf.debt)']; ?></p>
+												<p><?php 
+												if($currency[0] == 'HUF'){
+													echo '<p>' . $w['sum(pf.debt)'] . ' Ft' . '</p>';
+												}else{
+													echo '<p>' . ' $' . $w['sum(pf.debt)'] . '</p>';
+												}  ?></p>
 											</div>
 										</div>
 										<?php endforeach ?>

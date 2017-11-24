@@ -196,7 +196,9 @@ function newExpense() {
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
 			}
+
 		} else {	$expenseError = "Numbers don't add up!";
+
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
