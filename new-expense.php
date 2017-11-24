@@ -30,7 +30,7 @@ if(!empty($_SESSION['expenseError'])){
 							</div>
 							<div class="form-group">
 								<label for="amount">Amount</label>
-								<input name="amount" type="number" class="form-control" value="">
+								<input name="amount" step="0.5" type="number" class="form-control" value="">
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
@@ -54,7 +54,7 @@ if(!empty($_SESSION['expenseError'])){
 							echo '</div>';
 							echo '<div class="item">';
 							echo '<div class="input-group">';
-							echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" type="number" class="form-control">';
+							echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" step="0.5" type="number" class="form-control">';
 							echo '<span class="input-group-addon" id="basic-addon1">' . $currency[0] . '</span>';
 							echo '</div>';
 							echo '</div>';
