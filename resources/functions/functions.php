@@ -12,8 +12,7 @@ function returnEmail(){
 	include('connection.php');
 
 	$email = $db->prepare("SELECT email FROM users WHERE user_id = ?");
-    $email->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
-    $email->execute();
+    $email->execute([$_SESSION['user_id']]);
     $emailItem = $email->fetch();
 
     echo ($emailItem[0]);
@@ -23,8 +22,7 @@ function returnName(){
 	include('connection.php');
 
 	$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
-    $userName->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
-    $userName->execute();
+    $userName->execute([$_SESSION['user_id']]);
     $userNameItem = $userName->fetch();
 
     echo ($userNameItem[0]);
@@ -37,18 +35,14 @@ function updateBasicInfo(){
 	if(isset($_POST['updateBasicBtn'])) {
 		include('connection.php');
 		$emails = $db->prepare("SELECT email FROM users");
-    	$emails->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
-    	$emails->execute();
+    	$emails->execute([$_SESSION['user_id']]);
     	$emailItems = $emails->fetchAll();
 
 		if(empty($_POST['name'])){
 			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
 		}else{
 			$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
-			$updateBasic->bindParam(1, $_POST['name'], PDO::PARAM_STR);
-			$updateBasic->bindParam(2, $_POST['email'], PDO::PARAM_STR);
-			$updateBasic->bindParam(3, $_SESSION['user_id'], PDO::PARAM_INT);
-			$updateBasic->execute();
+			$updateBasic->execute([$_POST['name'], $_POST['email'], $_SESSION['user_id']]);
 
 			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Basic Info updated successfully!</div>';
 		}
@@ -60,8 +54,7 @@ if(isset($_POST['updateBasicBtn'])) updateBasicInfo();
 function updatePassword() {
 	include('connection.php');
 	$password = $db->prepare("SELECT password FROM users WHERE user_id = ?");
-    $password->bindParam(1, $_SESSION['user_id'], PDO::PARAM_STR);
-    $password->execute();
+    $password->execute([$_SESSION['user_id']]);
     $passwordItem = $password->fetch();
 
     //check if the given password is correct and the new passwords match
@@ -71,9 +64,7 @@ function updatePassword() {
 
     	//passwords match, initiate update
     	$updatePass = $db->prepare("UPDATE users SET password = ? WHERE user_id = ?");
-		$updatePass->bindParam(1, $pwd, PDO::PARAM_STR);
-		$updatePass->bindParam(2, $_SESSION['user_id'], PDO::PARAM_INT);
-		$updatePass->execute();
+		$updatePass->execute([$pwd, $_SESSION['user_id']]);
 
 		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Password updated successfully!</div>';
 		
@@ -185,15 +176,16 @@ function getCurrency() {
 }
 
 function newExpense() {
+	include('connection.php');
 	$paidBy = $_POST['paidBy'];
-	try{
-		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name) VALUES(?, ?)");
-		$expense->execute([$_GET['accountId']], [$_POST['expenseName']]);
-	}catch(Exception $e){
-		echo $e->getMessage();
-	}
+	$members = getMembers($_GET['accountId']);
+
+		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
+		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
+		$expenseId = $db->lastInsertId();
+		var_dump($expenseId);
 }
 
-if(isset($_POST['createExpenseBtn'])) updatePassword();
+if(isset($_POST['createExpenseBtn'])) newExpense();
 
 

@@ -25,8 +25,8 @@ if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="">Amount</label>
-								<input name="amount" type="text" class="form-control">
+								<label for="amount">Amount</label>
+								<input name="amount" type="text" class="form-control" value="">
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
@@ -35,48 +35,28 @@ if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 							<div class="form-group">
 								<label for="">Paid by</label>
 								<select name="paidBy" id="" class="form-control">
-									<?php foreach ($members as $member): ?>
-									<?php echo '<option value="' . $member['user_id'] . '">' . $member["user_name"] . '</option>'; ?>
-									<?php endforeach ?>
+									<?php foreach ($members as $member):
+										echo '<option value="' . $member['user_id'] . '">' . $member["user_name"] . '</option>';
+									endforeach ?>
 								</select>
 							</div>
 						</div>
 						<div class="bottom">
 							<h4>Paid For:</h4>
-							<div class="d-flex">
-								<div class="item">
-									<p>Péter Varga</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control">
-										<span class="input-group-addon" id="basic-addon1"><?php echo $currency[0] ?></span>
-									</div>
-								</div>
-							</div>
-							<div class="d-flex">
-								<div class="item">
-									<p>Dániel Petres</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
-									</div>
-								</div>
-							</div>
-							<div class="d-flex">
-								<div class="item">
-									<p>André Timár</p>
-								</div>
-								<div class="item">
-									<div class="input-group">
-										<input type="text" class="form-control">
-										<span class="input-group-addon" id="basic-addon1">HUF</span>
-									</div>
-								</div>
-							</div>
-							<a href="show.php?accountId=<?php echo $_GET["accountId"] ?>" name="createExpenseBtn" class="btn btn-primary">Create</a>
+							<?php foreach($members as $member):
+							echo '<div class="d-flex">';
+							echo '<div class="item">';
+							echo '<p>' . $member['user_name'] . '</p>';
+							echo '</div>';
+							echo '<div class="item">';
+							echo '<div class="input-group">';
+							echo '<input name="paidFor[' . $member['user_id'] . ']" type="text" class="form-control">';
+							echo '<span class="input-group-addon" id="basic-addon1">' . $currency[0] . '</span>';
+							echo '</div>';
+							echo '</div>';
+							echo '</div>';
+							endforeach ?>
+							<input type="submit" name="createExpenseBtn" class="btn btn-primary" value="Create">
 						</div>
 					</form>
 				</div>

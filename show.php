@@ -7,7 +7,6 @@
 $members = getMembers($_GET['accountId']);		
 $accId = $_GET['accountId'];
 $dir ="public/uploads/";  
-getDebt($accId);
 ?>
 	<section class="account-show">
 		<div class="container">
@@ -64,26 +63,7 @@ getDebt($accId);
 												<p>+$45</p>
 											</div>
 										</div>
-										
 										<?php endforeach ?>
-										<!-- <div class="d-flex">
-											<div class="item">
-												<p>Péter</p>
-												<span>Last Paid: Cocktails</span>
-											</div>
-											<div class="item">
-												<p>-$15</p>
-											</div>
-										</div>
-										<div class="d-flex">
-											<div class="item">
-												<p>Dániel</p>
-												<span>Last Paid: Apperitives</span>
-											</div>
-											<div class="item">
-												<p>-$185</p>
-											</div>
-										</div> -->
 									</div>
 								</div>
 								<div class="tab-pane fade" id="owe" role="tabpanel" aria-labelledby="owe-tab">
