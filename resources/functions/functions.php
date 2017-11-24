@@ -179,8 +179,6 @@ function newExpense() {
 	include('connection.php');
 	$paidBy = $_POST['paidBy'];
 	$members = getMembers($_GET['accountId']);
-	//var_dump($_POST['paidFor'] , $_POST['amount'] , $_POST['paidBy'], $_POST['expenseName']);
-	var_dump(in_array(null, $_POST['paidFor']));
 	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName']) {
 		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
 		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
@@ -214,8 +212,11 @@ function getBalance($userId){
 	$selectDebt->execute([$_GET['accountId'], $userId]);
 	$debt = $selectDebt->fetchAll(PDO::FETCH_ASSOC);
 	$debt['paid'] = $paid[0]['sum(amount)'];
-	return $debt;
+	if ($debt) {
+		return $debt;
+	} else { return 0; }
 }
+	
 
 function getPaidFor($expenseId) {
 	include('connection.php');
@@ -224,4 +225,44 @@ function getPaidFor($expenseId) {
 	$detailsItems = $details->fetchAll();
 
 	return $detailsItems;
+}
+
+function whoOwesWhat(){
+	include('connection.php');
+	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, sum(pf.debt)
+								FROM paid_for pf 
+								LEFT JOIN users u 
+								ON pf.paid_for = u.user_id 
+								LEFT JOIN expenses e
+								ON pf.expense_id = e.expense_id
+								WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
+								GROUP BY u.user_name, pf.paid_by");
+	$selectWow->execute([$_GET['accountId']]);
+	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
+	
+
+	foreach ($wow as $key => $value) {
+		$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
+	    $userName->execute([$value['paid_by']]);
+	    $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
+	    var_dump($userNameItem);
+	    //$wow['paidBy'] = $userNameItem;
+	}
+
+
+
+	// foreach ($wow as $key => $value) {
+	// 	$selectPaidBy = $db->prepare("SELECT u.user_name
+	// 						FROM users u
+	// 						LEFT JOIN paid_for pf
+	// 						ON u.user_id = pf.paid_by
+	// 						WHERE pf.paid_by = ?");
+	// 	$selectPaidBy->execute([$value['paid_by']]);
+	// 	$paidBy = $selectPaidBy->fetch(PDO::FETCH_ASSOC);
+	// 	$wow['paidBy'] = $paidBy;
+		
+	// }
+	 var_dump($wow);
+
+	return $wow;
 }

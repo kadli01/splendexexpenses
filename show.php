@@ -8,6 +8,7 @@ $members = getMembers($_GET['accountId']);
 $currency = getCurrency();	
 $accId = $_GET['accountId'];
 $dir ="public/uploads/"; 
+$wow = whoOwesWhat();
 ?>
 	<section class="account-show">
 		<div class="container">
@@ -93,17 +94,20 @@ $dir ="public/uploads/";
 								<div class="tab-pane fade" id="owe" role="tabpanel" aria-labelledby="owe-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Who Owes What</h4>
-
+										<?php foreach ($wow as $w): ?>
 										<div class="d-flex">
 											<div class="item">
-												<a href="" data-toggle="modal" data-target="#exampleModal"><p>Péter</p></a>
-												<span>Owes André</span>
+												<a href="" data-toggle="modal" data-target="#exampleModal"><p><?php echo $w['user_name']; ?></p></a>
+												<span>Owes <?php echo $w['paid_by']; ?></span>
 											</div>
 											<div class="item">
-												<p>$15</p>
+												<p><?php echo $w['sum(pf.debt)']; ?></p>
 											</div>
 										</div>
-										<div class="d-flex">
+										<?php endforeach ?>
+
+
+										<!-- <div class="d-flex">
 											<div class="item">
 												<a href="" data-toggle="modal" data-target="#exampleModal"><p>Dániel</p></a>
 												<span>Owes André</span>
@@ -111,7 +115,8 @@ $dir ="public/uploads/";
 											<div class="item">
 												<p>$185</p>
 											</div>
-										</div>
+										</div> -->
+										
 									</div>
 								</div>
 
