@@ -7,7 +7,6 @@
 $members = getMembers($_GET['accountId']);		
 $accId = $_GET['accountId'];
 $dir ="public/uploads/";  
-getDebt($accId);
 ?>
 	<section class="account-show">
 		<div class="container">
@@ -52,8 +51,8 @@ getDebt($accId);
 											<div class="item">
 												<p><?php echo $member['user_name']; ?></p>
 												<span>
-												<?php if (getLastPaid($member['user_id'])): ?>
-												Last Paid: <?php echo(getLastPaid($member['user_id'])['expense_name']); ?>
+												<?php if (getLastPaid($member['user_id'], $accId)): ?>
+												Last Paid: <?php echo(getLastPaid($member['user_id'],$accId)['expense_name']); ?>
 												
 											<?php else :{
 												echo "Did not pay for anything.";
