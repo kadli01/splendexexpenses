@@ -63,20 +63,26 @@ $dir ="public/uploads/";
 											<div class="item">
 												<p><?php 
 												$balance = getBalance($member['user_id']);
-												$x = $balance['paid'] - $balance[0]['sum(p.debt)'];
-												if ($currency[0] === 'HUF') {
-													if ($x >= 0) {
-														echo "+" . $x . " Ft";
+												if(isset($balance[0])){
+													$x = $balance['paid'] - $balance[0]['sum(p.debt)'];
+													if ($currency[0] === 'HUF') {
+														if ($x >= 0) {
+															echo "+" . $x . " Ft";
+														} else {
+															echo $x . " Ft";
+														}
 													} else {
-														echo $x . " Ft";
+														if ($x >= 0){
+															echo "+$" . $x;
+														}
+														else{
+															echo "-$" . ($x*-1);
+														}
 													}
+												}elseif ($currency[0] === 'HUF'){
+													echo '0 Ft';
 												} else {
-													if ($x >= 0){
-														echo "+$" . $x;
-													}
-													else{
-														echo "-$" . ($x*-1);
-													}
+													echo '$0';
 												}
 												?></p>
 											</div>
