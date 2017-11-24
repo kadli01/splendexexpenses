@@ -4,8 +4,12 @@ include('resources/functions/functions.php'); isLoggedIn();
 $accounts = getAccounts();
 $currency = getCurrency();
 if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
+if(!empty($_SESSION['expenseError'])){
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
+		unset($_SESSION['expenseError']);
+}
 ?>
-	<?php include('resources/include/header.php'); ?>
+<?php include('resources/include/header.php'); ?>
 	
 	<section class="create">
 		<div class="container">
@@ -26,7 +30,7 @@ if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 							</div>
 							<div class="form-group">
 								<label for="amount">Amount</label>
-								<input name="amount" type="text" class="form-control" value="">
+								<input name="amount" type="number" class="form-control" value="">
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
@@ -50,7 +54,7 @@ if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 							echo '</div>';
 							echo '<div class="item">';
 							echo '<div class="input-group">';
-							echo '<input name="paidFor[' . $member['user_id'] . ']" type="text" class="form-control">';
+							echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" type="number" class="form-control">';
 							echo '<span class="input-group-addon" id="basic-addon1">' . $currency[0] . '</span>';
 							echo '</div>';
 							echo '</div>';

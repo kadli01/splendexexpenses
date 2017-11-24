@@ -179,7 +179,7 @@ function newExpense() {
 	include('connection.php');
 	$paidBy = $_POST['paidBy'];
 	$members = getMembers($_GET['accountId']);
-
+	if($_POST['paidFor'][0] >= 0 ) {
 		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
 		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
 		$expenseId = $db->lastInsertId();
@@ -187,7 +187,11 @@ function newExpense() {
 			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 		}
-		
+	} else {
+		$expenseError = "You need to fill out the \"Paid For\" fields!";
+		$_SESSION['expenseError'] = $expenseError;
+		return false;
+	}
 }
 
 if(isset($_POST['createExpenseBtn'])) newExpense();
