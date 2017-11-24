@@ -179,15 +179,27 @@ function newExpense() {
 	include('connection.php');
 	$paidBy = $_POST['paidBy'];
 	$members = getMembers($_GET['accountId']);
+	$total = 0;
+	foreach ($_POST['paidFor'] as $key => $value) {
+		$total += $value;
+	}
+
+
+
 	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName']) {
-		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
-		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
-		$expenseId = $db->lastInsertId();
-		foreach ($_POST['paidFor'] as $key => $value) {
-			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
-			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-			header('Location: show.php?accountId=' . $_GET["accountId"] . '');
-		}
+		if ($total == $_POST['amount']) {
+			$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
+			$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
+			$expenseId = $db->lastInsertId();
+			foreach ($_POST['paidFor'] as $key => $value) {
+				$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
+				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
+				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
+			}
+		} else {	$expenseError = "matek?";
+				$_SESSION['expenseError'] = $expenseError;
+				return false;
+		}	
 
 	} else {
 		$expenseError = "You need to fill out all fields!";
@@ -240,16 +252,17 @@ function whoOwesWhat(){
 	$selectWow->execute([$_GET['accountId']]);
 	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
 	
-
-	foreach ($wow as $key => $value) {
+	$result = array();
+	foreach ($wow as $w) {
 		$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
-	    $userName->execute([$value['paid_by']]);
+	    $userName->execute([$w['paid_by']]);
 	    $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
-	    var_dump($userNameItem);
-	    //$wow['paidBy'] = $userNameItem;
+	    //var_dump($userNameItem['user_name']);
+	    array_push($w, $userNameItem);
+	    //var_dump($w);
+	    $result[] = $w;
+	  //  $w += $userNameItem['user_name'];
 	}
-
-
 
 	// foreach ($wow as $key => $value) {
 	// 	$selectPaidBy = $db->prepare("SELECT u.user_name
@@ -262,7 +275,7 @@ function whoOwesWhat(){
 	// 	$wow['paidBy'] = $paidBy;
 		
 	// }
-	 var_dump($wow);
+	 //var_dump($wow);
 
-	return $wow;
+	return $result;
 }

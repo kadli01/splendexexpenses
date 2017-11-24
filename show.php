@@ -98,7 +98,7 @@ $wow = whoOwesWhat();
 										<div class="d-flex">
 											<div class="item">
 												<a href="" data-toggle="modal" data-target="#exampleModal"><p><?php echo $w['user_name']; ?></p></a>
-												<span>Owes <?php echo $w['paid_by']; ?></span>
+												<span>Owes <?php echo $w[0]['user_name']; ?></span>
 											</div>
 											<div class="item">
 												<p><?php echo $w['sum(pf.debt)']; ?></p>
