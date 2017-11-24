@@ -241,27 +241,12 @@ function whoOwesWhat(){
 	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
 	
 
-	foreach ($wow as $key => $value) {
+	foreach ($wow as $value) {
 		$userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
 	    $userName->execute([$value['paid_by']]);
 	    $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
 	    var_dump($userNameItem);
-	    //$wow['paidBy'] = $userNameItem;
 	}
-
-
-
-	// foreach ($wow as $key => $value) {
-	// 	$selectPaidBy = $db->prepare("SELECT u.user_name
-	// 						FROM users u
-	// 						LEFT JOIN paid_for pf
-	// 						ON u.user_id = pf.paid_by
-	// 						WHERE pf.paid_by = ?");
-	// 	$selectPaidBy->execute([$value['paid_by']]);
-	// 	$paidBy = $selectPaidBy->fetch(PDO::FETCH_ASSOC);
-	// 	$wow['paidBy'] = $paidBy;
-		
-	// }
 	 var_dump($wow);
 
 	return $wow;
