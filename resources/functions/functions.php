@@ -186,6 +186,7 @@ function newExpense() {
 		foreach ($_POST['paidFor'] as $key => $value) {
 			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
+			header('Location: show.php?accountId=' . $_GET["accountId"] . '');
 		}
 
 	} else {
