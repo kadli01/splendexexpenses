@@ -183,6 +183,12 @@ function newExpense() {
 		$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
 		$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
 		$expenseId = $db->lastInsertId();
+		foreach ($_POST['paidFor'] as $key => $value) {
+			$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
+			$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
+			var_dump($value);
+		}
+		
 		var_dump($expenseId);
 }
 
