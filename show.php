@@ -96,9 +96,9 @@ $wow = whoOwesWhat();
 										<h4>Who Owes What</h4>
 										<?php foreach ($wow as $w): ?>
 										<div class="d-flex">
-											<div class="item">
-												<a href="" data-toggle="modal" data-target="#exampleModal"><p><?php echo $w['user_name']; ?></p></a>
-												<span>Owes <?php echo $w[0]['user_name']; ?></span>
+											<div class="item"?>
+												<?php echo '<a href=""><p>' . $w['user_name'] .  '</p></a>'; ?>
+												<?php echo '<span>Owes ' . $w[0]['user_name'] . '</span>'; ?>
 											</div>
 											<div class="item">
 												<p><?php 
@@ -107,6 +107,40 @@ $wow = whoOwesWhat();
 												}else{
 													echo '<p>' . ' $' . $w['sum(pf.debt)'] . '</p>';
 												}  ?></p>
+											</div>
+											<div class="item">
+												<form action="" method="post">
+													<input type="hidden" name="paidFor" value="<?php echo $w['paid_for']; ?>">
+													<input type="hidden" name="paidBy" value="<?php echo $w['paid_by']; ?>">
+													<input type="hidden" name="debt" value="<?php echo $w['sum(pf.debt)']; ?>">
+													<button type="button" name="settle" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Settle</button>
+
+													<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+														<div class="modal-dialog" role="document">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																		<span aria-hidden="true">&times;</span>
+																	</button>
+																</div>
+																<div class="modal-body text-center">
+																<h5 class="modal-title text-center" id="exampleModalLabel">Alert</h5>
+																<?php 
+																if($currency[0] == 'HUF'){
+																	echo '<p>Are you sure you\'d like to settle ' . $w["user_name"] . '\'s debt of ' . $w['sum(pf.debt)'] . ' Ft?</p>';
+																}else {
+																	echo '<p>Are you sure you\'d like to settle Péter\'s debt of $15?</p>';
+																} ?>
+																
+															</div>
+															<div class="modal-footer">
+																<button type="button" data-dismiss="modal" name="noBtn" class="btn btn-primary">No</a>
+																<button type="submit" name="settleYesBtn" class="btn btn-primary">Yes</a>
+															</div>
+															</div>
+														</div>
+													</div>
+												</form>
 											</div>
 										</div>
 										<?php endforeach ?>
@@ -144,25 +178,5 @@ $wow = whoOwesWhat();
 			</div>
 		</div>
 	</section>
-
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">
-					<h5 class="modal-title text-center" id="exampleModalLabel">Alert</h5>
-					<p>Are you sure you'd like to settle Péter's debt of $15?</p>
-				</div>
-				<div class="modal-footer">
-					<a href="" class="btn btn-light">No</a>
-					<a href="" class="btn btn-primary">Yes</a>
-				</div>
-			</div>
-		</div>
-	</div>
 	
 <?php include('resources/include/scripts.php'); ?>

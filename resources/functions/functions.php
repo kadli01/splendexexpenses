@@ -243,14 +243,14 @@ function getPaidFor($expenseId) {
 
 function whoOwesWhat(){
     include('connection.php');
-    $selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, sum(pf.debt)
+    $selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
                                 LEFT JOIN users u 
                                 ON pf.paid_for = u.user_id 
                                 LEFT JOIN expenses e
                                 ON pf.expense_id = e.expense_id
                                 WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
-                                GROUP BY u.user_name, pf.paid_by");
+                                GROUP BY u.user_name, pf.paid_by, pf.paid_for");
     $selectWow->execute([$_GET['accountId']]);
     $wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
     
@@ -263,4 +263,12 @@ function whoOwesWhat(){
         $result[] = $w;
     }
     return $result;
+}
+
+if(isset($_POST['settleYesBtn'])) settleDebt();
+
+function settleDebt(){
+	include('connection.php');
+	$sql = $db->prepare("DELETE FROM paid_for WHERE paid_for = ? AND paid_by = ?");
+	$sql->execute([$_POST['paidFor'], $_POST['paidBy']]);
 }
