@@ -51,7 +51,13 @@ $wow = whoOwesWhat();
 										<?php foreach ($members as $member): ?>
 										<div class="d-flex">
 											<div class="item">
-												<p><?php echo $member['user_name']; ?></p>
+												<p>
+												<?php if($member['user_name']){
+												 	echo $member['user_name'];
+												 } else {
+													echo "Unknown - " . $member['email'];
+												}?>
+												</p>
 												<span>
 												<?php if (getLastPaid($member['user_id'], $accId)): ?>
 												Last Paid: <?php echo(getLastPaid($member['user_id'],$accId)['expense_name']); ?>
@@ -97,7 +103,8 @@ $wow = whoOwesWhat();
 										<?php foreach ($wow as $w): ?>
 										<div class="d-flex">
 											<div class="item">
-												<a href="" data-toggle="modal" data-target="#exampleModal"><p><?php echo $w['user_name']; ?></p></a>
+												<a href="" data-toggle="modal" data-target="#exampleModal"><p><?php 
+												echo $w['user_name']; ?></p></a>
 												<span>Owes <?php echo $w[0]['user_name']; ?></span>
 											</div>
 											<div class="item">
@@ -145,7 +152,7 @@ $wow = whoOwesWhat();
 		</div>
 	</section>
 
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -163,6 +170,6 @@ $wow = whoOwesWhat();
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	
 <?php include('resources/include/scripts.php'); ?>

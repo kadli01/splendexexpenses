@@ -105,7 +105,7 @@ function getExpenses($accountId){
 
 function getPeoples($accId = null){
 	include('connection.php');
-	$peoplesResult = $db->prepare("SELECT user_name FROM users");
+	$peoplesResult = $db->prepare("SELECT user_id ,user_name, email FROM users");
     $peoplesResult->execute();
     $peoples = $peoplesResult->fetchAll(PDO::FETCH_ASSOC);
     //var_dump($people);
@@ -241,14 +241,14 @@ function getPaidFor($expenseId) {
 
 function whoOwesWhat(){
 	include('connection.php');
-	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, sum(pf.debt)
-								FROM paid_for pf 
-								LEFT JOIN users u 
-								ON pf.paid_for = u.user_id 
-								LEFT JOIN expenses e
-								ON pf.expense_id = e.expense_id
-								WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
-								GROUP BY u.user_name, pf.paid_by");
+	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
+                                FROM paid_for pf 
+                                LEFT JOIN users u 
+                                ON pf.paid_for = u.user_id 
+                                LEFT JOIN expenses e
+                                ON pf.expense_id = e.expense_id
+                                WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
+                                GROUP BY u.user_name, pf.paid_by, pf.paid_for");
 	$selectWow->execute([$_GET['accountId']]);
 	$wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);
 	$result = array();

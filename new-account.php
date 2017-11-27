@@ -29,16 +29,21 @@
 						<div class="form-group">
 							<label for="">People</label>
 							<div class="create__checkbox">
-								<?php foreach ($peoples as $people): 
-								if ($people['user_name']) { ?>
+								<?php foreach ($peoples as $people): ?>
 								<div>
 									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" name="people[]" value="<?php echo $people['user_name']; ?>">
+										<input type="checkbox" class="custom-control-input" name="people[]" value="<?php echo $people['user_id']; ?>">
 										<span class="custom-control-indicator"></span>
-										<span class="custom-control-description"><?php echo $people['user_name'] ?></span>
+										<?php if ($people['user_name']):  ?>
+										<span class="custom-control-description"><?php echo $people['user_name']; ?>
+
+											<?php else: echo "Unknown - " . $people['email']; ?>
+											<?php endif; ?>
+										</span>
 									</label>
 								</div>
-								<?php } endforeach ?>
+								
+								<?php endforeach; ?>
 							</div>
 						</div>
 						<div class="form-group">
