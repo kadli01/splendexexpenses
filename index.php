@@ -1,6 +1,5 @@
 <?php include('resources/include/head.php'); ?>
 	<?php session_start(); include('resources/functions/login.php'); ?>
-	<?php //phpinfo(); ?>
 	<section class="auth">
 		<div class="container">
 			<h1>Splendex Expenses</h1>

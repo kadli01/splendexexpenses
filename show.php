@@ -51,7 +51,13 @@ $wow = whoOwesWhat();
 										<?php foreach ($members as $member): ?>
 										<div class="d-flex">
 											<div class="item">
-												<p><?php echo $member['user_name']; ?></p>
+												<p>
+												<?php if($member['user_name']){
+												 	echo $member['user_name'];
+												 } else {
+													echo "Unknown - " . $member['email'];
+												}?>
+												</p>
 												<span>
 												<?php if (getLastPaid($member['user_id'], $accId)): ?>
 												Last Paid: <?php echo(getLastPaid($member['user_id'],$accId)['expense_name']); ?>
@@ -178,5 +184,4 @@ $wow = whoOwesWhat();
 			</div>
 		</div>
 	</section>
-	
 <?php include('resources/include/scripts.php'); ?>
