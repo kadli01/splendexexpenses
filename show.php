@@ -1,9 +1,16 @@
-<?php include('resources/include/head.php'); ?>
-<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-<?php $expenses = getExpenses($_GET['accountId']); ?>
-<?php include('resources/include/header.php'); ?>
+<?php 
+include('resources/include/head.php');
+include('resources/functions/functions.php'); 
+isLoggedIn();
 
-<?php $details = getAccounts($_GET['accountId']);
+if(isset($_SESSION['successMessage'])) {
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['successMessage'] . '</div>';	
+	unset($_SESSION['successMessage']);
+}
+
+include('resources/include/header.php');
+$expenses = getExpenses($_GET['accountId']);
+$details = getAccounts($_GET['accountId']);
 $members = getMembers($_GET['accountId']);
 $currency = getCurrency();	
 $accId = $_GET['accountId'];
@@ -116,21 +123,26 @@ $wow = whoOwesWhat();
 								<div class="tab-pane fade" id="owe" role="tabpanel" aria-labelledby="owe-tab">
 									<div class="tab__wrapper text-center">
 										<h4>Who Owes What</h4>
-										<?php foreach ($wow as $i => $w): ?>
-										<div class="d-flex">
-											<div class="item"?>
-												<?php echo '<a href=""><p>' . $w['user_name'] .  '</p></a>'; ?>
-												<?php echo '<span>Owes ' . $w[0]['user_name'] . '</span>'; ?>
-											</div>
-											<div class="item">
+										<?php 
+										if(!empty($wow)){
+											foreach ($wow as $i => $w):
+											?>
+											<div class="d-flex">
+												<div class="item"?>
 												<?php 
-													if($currency[0] == 'HUF'){
-														echo '<p>' . $w['sum(pf.debt)'] . ' Ft' . '</p>';
-													}else{
-														echo '<p>' . ' $' . $w['sum(pf.debt)'] . '</p>';
-													}
+													echo '<a href=""><p>' . $w['user_name'] .  '</p></a>'; 
+													echo '<span>Owes ' . $w[0]['user_name'] . '</span>'; 
 												?>
 											</div>
+											<div class="item">
+													<?php 
+														if($currency[0] == 'HUF'){
+															echo '<p>' . $w['sum(pf.debt)'] . ' Ft' . '</p>';
+														}else{
+															echo '<p>' . ' $' . $w['sum(pf.debt)'] . '</p>';
+														}
+													?>
+												</div>
 											<div class="item">
 												<form action="" method="post">
 													<input type="hidden" name="paidFor" value="<?php echo $w['paid_for']; ?>">
@@ -143,35 +155,39 @@ $wow = whoOwesWhat();
 														<?php endif; ?>
 													<?php endforeach; ?>
 
-													<div class="modal fade" id="exampleModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-														<div class="modal-dialog" role="document">
-															<div class="modal-content">
-																<div class="modal-header">
-																	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																		<span aria-hidden="true">&times;</span>
-																	</button>
+														<div class="modal fade" id="exampleModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+															<div class="modal-dialog" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<span aria-hidden="true">&times;</span>
+																		</button>
+																	</div>
+																	<div class="modal-body text-center">
+																	<h5 class="modal-title text-center" id="exampleModalLabel">Alert</h5>
+																	<?php 
+																		if($currency[0] == 'HUF'){
+																			echo '<p>Are you sure you\'d like to settle ' . $w["user_name"] . '\'s debt of ' . $w['sum(pf.debt)'] . ' Ft?</p>';
+																		}else {
+																			echo '<p>Are you sure you\'d like to settle ' . $w["user_name"] . '\'s debt of $' . $w['sum(pf.debt)'] . '?</p>';
+																		}
+																	?>
 																</div>
-																<div class="modal-body text-center">
-																<h5 class="modal-title text-center" id="exampleModalLabel">Alert</h5>
-																<?php 
-																	if($currency[0] == 'HUF'){
-																		echo '<p>Are you sure you\'d like to settle ' . $w["user_name"] . '\'s debt of ' . $w['sum(pf.debt)'] . ' Ft?</p>';
-																	}else {
-																		echo '<p>Are you sure you\'d like to settle ' . $w["user_name"] . '\'s debt of $' . $w['sum(pf.debt)'] . '?</p>';
-																	}
-																?>
-															</div>
-															<div class="modal-footer">
-																<button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
-																<button type="submit" name="settleYesBtn" class="btn btn-primary">Yes</a>
-															</div>
+																<div class="modal-footer">
+																	<button type="button" data-dismiss="modal" class="btn btn-primary">No</a>
+																	<button type="submit" name="settleYesBtn" class="btn btn-primary">Yes</a>
+																</div>
+																</div>
 															</div>
 														</div>
-													</div>
-												</form>
+													</form>
+												</div>
 											</div>
-										</div>
-										<?php endforeach ?>
+											<?php endforeach; 
+											}else {
+												echo '<p>There are no expenses yet in this account. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
+											} 
+											?>
 									</div>
 								</div>
 

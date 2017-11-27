@@ -1,17 +1,17 @@
-
-<?php include('resources/include/head.php'); ?>
-<?php include('resources/functions/functions.php'); isLoggedIn(); 
-//phpinfo();
+<?php 
+include('resources/include/head.php');
+include('resources/functions/functions.php');
+isLoggedIn(); 
 $accounts = getAccounts();
-$dir ="public/uploads/"; ?>
-<?php
-				if (!empty($_SESSION['createError'])) {
-					echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['createError'] . '</div>';	
-					unset($_SESSION['createError']);
-			} ?>
+$dir ="public/uploads/";
 
-	<?php include('resources/include/header.php'); ?>
+if (!empty($_SESSION['createError'])) {
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['createError'] . '</div>';	
+	unset($_SESSION['createError']);
+} 
+?>
 
+<?php include('resources/include/header.php'); ?>
 	<section class="accounts">
 		<div class="container">
 			<div class="row">
@@ -60,54 +60,6 @@ $dir ="public/uploads/"; ?>
 					</a>
 				</div>
 				<?php endforeach ?>
-				<!--<div class="col-3">
-					<a href="show.php">
-						<div class="accounts__card">
-							<div class="card__content">
-								<img src="http://via.placeholder.com/100x100" class="img-fluid">
-								<p>Dinner</p>
-								<span>$235</span>
-								<div class="content__icons">
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-3">
-					<a href="show.php">
-						<div class="accounts__card">
-							<div class="card__content">
-								<img src="http://via.placeholder.com/100x100" class="img-fluid">
-								<p>Gas</p>
-								<span>$235</span>
-								<div class="content__icons">
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-3">
-					<a href="show.php">
-						<div class="accounts__card">
-							<div class="card__content">
-								<img src="http://via.placeholder.com/100x100" class="img-fluid">
-								<p>Hotel</p>
-								<span>$235</span>
-								<div class="content__icons">
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>-->
 			</div>
 		</div>
 	</section>

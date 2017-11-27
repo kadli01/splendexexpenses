@@ -35,17 +35,23 @@ function returnName(){
 function updateBasicInfo(){
 	if(isset($_POST['updateBasicBtn'])) {
 		include('connection.php');
-		$emails = $db->prepare("SELECT email FROM users");
-    	$emails->execute([$_SESSION['user_id']]);
-    	$emailItems = $emails->fetchAll();
+		//get all users information
+		$userData = $db->prepare("SELECT user_id, email FROM users WHERE user_id = ?");
+    	$userData->execute([$_SESSION['user_id']]);
+    	$userDataItems = $userData->fetchAll(PDO::FETCH_ASSOC);
 
-		if(empty($_POST['name'])){
-			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';	
-		}else{
-			$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
-			$updateBasic->execute([$_POST['name'], $_POST['email'], $_SESSION['user_id']]);
+    	foreach ($userDataItems as $ud) {
+			if(!empty($_POST['name']) && $_POST['email'] == $ud['email']){
+				$updateBasic = $db->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
+				$updateBasic->execute([$_POST['name'], $_POST['email'], $_SESSION['user_id']]);
 
-			echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Basic Info updated successfully!</div>';
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Basic Info updated successfully!</div>';
+					
+			}elseif(empty($_POST['name'])){
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';
+			}else{
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The email address you provided is already in use!</div>';
+			}
 		}
 	}
 }
@@ -69,8 +75,10 @@ function updatePassword() {
 
 		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Password updated successfully!</div>';
 		
-    }else{
-    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The given data dosen\'t match!</div>';	
+    }elseif($_POST['oldPwd'] != password_verify($_POST['oldPwd'], $passwordItem[0])){
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">You entered your old password incorrectly. Please try again!</div>';
+    } else {
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The given data dosen\'t match!</div>';
     }
 }
 
@@ -112,16 +120,7 @@ function getPeoples($accId = null){
     //var_dump($people);
     return $peoples;
 }
-/*
-function getAccountDetails($accId){
-	include('connection.php');
-	$selectDetails = $db->prepare("SELECT * FROM accounts WHERE account_id = ?");
-    $selectDetails->execute([$accId]);
-    $details = $selectDetails->fetch(PDO::FETCH_ASSOC);
-    var_dump($details);
-    return $details;
-}
-*/
+
 //get the members of the account from the db
 function getMembers($accId){
 	include('connection.php');
@@ -195,8 +194,6 @@ function newExpense() {
 		$total += $value;
 	}
 
-
-
 	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName']) {
 		if ($total == $_POST['amount']) {
 			$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
@@ -206,6 +203,7 @@ function newExpense() {
 				$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
+				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
 		} else {	$expenseError = "Numbers don't add up!";
@@ -284,7 +282,6 @@ function whoOwesWhat(){
         	$w['user_name'] = "Unknown - " . $w['email']; 
         }
         array_push($w, $userNameItem);
-        var_dump($w);
         $result[] = $w;
     }
 
