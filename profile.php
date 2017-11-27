@@ -1,9 +1,10 @@
-<?php include('resources/include/head.php'); ?>
-<?php include('resources/functions/functions.php'); isLoggedIn();?>
+<?php 
+include('resources/include/head.php');
+include('resources/functions/functions.php');
+isLoggedIn();
+include('resources/include/header.php');
+?>
 
-
-<?php include('resources/include/header.php'); ?>
-	
 	<section class="form">
 		<div class="container">
 			<div class="row">

@@ -1,14 +1,15 @@
+<?php 
+include('resources/functions/functions.php');
+include('resources/include/head.php');
+isLoggedIn();
+$peoples = getPeoples();
 
-<?php include('resources/functions/functions.php'); isLoggedIn(); ?>
-<?php include('resources/include/head.php'); ?>
-<?php $peoples = getPeoples(); ?>
-			<?php 
-				if (!empty($_SESSION['createError'])) {
-				//echo  '<h5 style="color: red">' . $_SESSION['createError'] . '</h5>';
-					echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['createError'] . '</div>';	
-					unset($_SESSION['createError']);
-			} ?>
-			<?php include('resources/include/header.php'); ?>
+if (!empty($_SESSION['createError'])) {
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['createError'] . '</div>';	
+	unset($_SESSION['createError']);
+} 
+?>
+<?php include('resources/include/header.php'); ?>
 	<section class="create form">
 		<div class="container">
 
