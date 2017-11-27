@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 //check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
@@ -81,7 +82,7 @@ function getAccounts($accId = null){
 	$accountResult = $db->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
 									ON e.account_id = a.account_id
 									GROUP BY a.account_id
-								/*	HAVING a.account_id = ?*/");
+									/*HAVING a.account_id = ?*/");
 	$accountResult->execute(/*[$accId]*/);
 	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
 	foreach ($accounts as $key => $value) {
@@ -96,7 +97,7 @@ function getAccounts($accId = null){
 function getExpenses($accountId){
 	include('connection.php');
 
-	$expense = $db->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ?");
+	$expense = $db->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ? ORDER BY e.created_at DESC");
 	$expense->execute([$accountId]);
 	$expenseResult = $expense->fetchAll(PDO::FETCH_ASSOC);	
 
@@ -127,7 +128,17 @@ function getMembers($accId){
 	$selectMembers = $db->prepare("SELECT * FROM users u JOIN users_accounts ua ON u.user_id = ua.user_id WHERE ua.account_id = ?");
     $selectMembers->execute([$accId]);
     $members = $selectMembers->fetchAll(PDO::FETCH_ASSOC);
-    return $members;
+    $result = array();
+    foreach ($members as $member) {
+    	if (!$member['user_name']) {
+    		$member['user_name']= ("Unknown - " . $member['email']);
+    		array_push($result, $member);
+    	}else{
+    		array_push($result, $member);
+    	}
+    }
+    //var_dump($result);
+    return $result;
 }
 
 //get the last expense the user paid for
@@ -254,7 +265,7 @@ function getPaidFor($expenseId) {
 
 function whoOwesWhat(){
 	include('connection.php');
-	$selectWow = $db->prepare("SELECT e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
+	$selectWow = $db->prepare("SELECT u.email, e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
                                 LEFT JOIN users u 
                                 ON pf.paid_for = u.user_id 
@@ -269,9 +280,14 @@ function whoOwesWhat(){
         $userName = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
         $userName->execute([$w['paid_by']]);
         $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
+        if (!$w['user_name']) {
+        	$w['user_name'] = "Unknown - " . $w['email']; 
+        }
         array_push($w, $userNameItem);
+        var_dump($w);
         $result[] = $w;
     }
+
     return $result;
 }
 

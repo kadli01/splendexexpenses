@@ -24,12 +24,20 @@ $wow = whoOwesWhat();
 							<h3><?php echo $details[$accId]['account_name'];?></h3>
 							<span><?php 
 								if ($details[$accId]['currency'] === 'USD') {
-									echo "$";
+									if ($details[$accId]['SUM(e.amount)']) {
+										echo "$" . $details[$accId]['SUM(e.amount)'];
+									} else {
+										echo "$0";
+									}
+								} else {
+									if ($details[$accId]['SUM(e.amount)']) {
+										echo $details[$accId]['SUM(e.amount)'] . " Ft";
+									} else {
+										echo "0 Ft";
+									}
 								}
-								echo $details[$accId]['SUM(e.amount)'];
-								if($details[$accId]['currency'] === 'HUF'){
-									echo " Ft";
-							}?></span>
+
+							?></span>
 									
 						</div>
 						<div class="show__nav">
@@ -55,7 +63,7 @@ $wow = whoOwesWhat();
 												<?php if($member['user_name']){
 												 	echo $member['user_name'];
 												 } else {
-													echo "Unknown - " . $member['email'];
+													//echo "Unknown - " . $member['email'];
 												}?>
 												</p>
 												<span>
@@ -129,7 +137,11 @@ $wow = whoOwesWhat();
 													<input type="hidden" name="paidBy" value="<?php echo $w['paid_by']; ?>">
 													<input type="hidden" name="debt" value="<?php echo $w['sum(pf.debt)']; ?>">
 													<input type="hidden" name="expense_id" value="<?php echo $w['expense_id']; ?>">
-													<button type="button" name="settle" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Settle</button>
+													<?php foreach ($members as $member): ?>
+														<?php if ($_SESSION['user_id'] == $member['user_id']): ?>
+															<button type="button" name="settle" data-toggle="modal" data-target="#exampleModal<?php echo $i; ?>" class="btn btn-primary">Settle</button>
+														<?php endif; ?>
+													<?php endforeach; ?>
 
 													<div class="modal fade" id="exampleModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 														<div class="modal-dialog" role="document">
@@ -184,7 +196,11 @@ $wow = whoOwesWhat();
 												echo '</div>';
 											endforeach;
 										}else { echo 'There are no Expenses for this account!<br><br>';} ?>
-										<a href="new-expense.php?accountId=<?php echo $_GET['accountId']; ?>"class="btn btn-primary">Add New</a>
+										<?php foreach ($members as $member): ?>
+											<?php if ($_SESSION['user_id'] == $member['user_id']): ?>
+												<a href="new-expense.php?accountId=<?php echo $_GET['accountId']; ?>"class="btn btn-primary">Add New</a>
+											<?php endif ?>
+										<?php endforeach ?>
 									</div>
 								</div>
 							</div>
