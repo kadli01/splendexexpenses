@@ -213,20 +213,31 @@ if(isset($_POST['createExpenseBtn'])) newExpense();
 
 function getBalance($userId){
 	include('connection.php');
-	$selectPaid = $db->prepare("SELECT sum(amount) FROM expenses WHERE account_id = ? && paid_by = ?");
+	// $selectPaid = $db->prepare("SELECT sum(amount) FROM expenses e
+	// 							LEFT JOIN paid_for pf
+	// 							ON e.expense_id = pf.expense_id
+	// 							WHERE e.account_id = ? && e.paid_by = ? && pf.paid_by<>pf.paid_for");
+
+	$selectPaid = $db->prepare("SELECT sum(pf.debt) FROM expenses e
+								LEFT JOIN paid_for pf
+								ON e.expense_id = pf.expense_id
+								WHERE e.account_id = ? && pf.paid_by = ? && pf.paid_by<>pf.paid_for");
 	$selectPaid->execute([$_GET['accountId'], $userId]);
 	$paid = $selectPaid->fetchAll(PDO::FETCH_ASSOC);
+	//var_dump($paid);
 	$selectDebt = $db->prepare("SELECT u.user_name, sum(p.debt) FROM paid_for p
 								LEFT JOIN expenses e
 								ON p.expense_id = e.expense_id 
 								LEFT JOIN users u
 								ON p.paid_for = u.user_id
-								WHERE e.account_id = ? && p.paid_for = ?
+								WHERE e.account_id = ? && p.paid_for = ? && p.paid_by<>p.paid_for
 								GROUP BY p.paid_for");
 	$selectDebt->execute([$_GET['accountId'], $userId]);
 	$debt = $selectDebt->fetchAll(PDO::FETCH_ASSOC);
-	$debt['paid'] = $paid[0]['sum(amount)'];
+	$debt['paid'] = $paid[0]['sum(pf.debt)'];
+	$paid = null;
 	if ($debt) {
+	//	var_dump($debt);
 		return $debt;
 	} else { return 0; }
 }
@@ -243,14 +254,14 @@ function getPaidFor($expenseId) {
 
 function whoOwesWhat(){
 	include('connection.php');
-	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
+	$selectWow = $db->prepare("SELECT e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
                                 LEFT JOIN users u 
                                 ON pf.paid_for = u.user_id 
                                 LEFT JOIN expenses e
                                 ON pf.expense_id = e.expense_id
                                 WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
-                                GROUP BY u.user_name, pf.paid_by, pf.paid_for");
+                                GROUP BY u.user_name, pf.paid_by, pf.paid_for, e.expense_id");
     $selectWow->execute([$_GET['accountId']]);
     $wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);  
     $result = array();
@@ -270,4 +281,7 @@ function settleDebt(){
 	include('connection.php');
 	$sql = $db->prepare("DELETE FROM paid_for WHERE paid_for = ? AND paid_by = ?");
 	$sql->execute([$_POST['paidFor'], $_POST['paidBy']]);
+	$sql = $db->prepare("DELETE FROM paid_for WHERE paid_by = paid_for AND expense_id = ?");
+	$sql->execute([$_POST['expense_id']]);	
+	
 }

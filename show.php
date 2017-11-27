@@ -87,9 +87,17 @@ $wow = whoOwesWhat();
 														}
 													}
 												}elseif ($currency[0] === 'HUF'){
-													echo '0 Ft';
+													if (!$balance['paid']) {
+														echo "0 Ft";
+													} else {
+														echo $balance['paid'] . ' Ft';
+													}
 												} else {
-													echo '$0';
+													if (!$balance['paid']) {
+														echo "$0";
+													} else {
+														echo "$" . $balance['paid'];
+													}
 												}
 												?></p>
 											</div>
@@ -119,6 +127,7 @@ $wow = whoOwesWhat();
 													<input type="hidden" name="paidFor" value="<?php echo $w['paid_for']; ?>">
 													<input type="hidden" name="paidBy" value="<?php echo $w['paid_by']; ?>">
 													<input type="hidden" name="debt" value="<?php echo $w['sum(pf.debt)']; ?>">
+													<input type="hidden" name="expense_id" value="<?php echo $w['expense_id']; ?>">
 													<button type="button" name="settle" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary">Settle</button>
 
 													<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
