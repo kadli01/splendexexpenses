@@ -264,10 +264,10 @@ function whoOwesWhat(){
     return $result;
 }
 
-if(isset($_POST['settleYesBtn'])) settleDebt();
-
 function settleDebt(){
 	include('connection.php');
 	$sql = $db->prepare("DELETE FROM paid_for WHERE paid_for = ? AND paid_by = ?");
 	$sql->execute([$_POST['paidFor'], $_POST['paidBy']]);
 }
+
+if(isset($_POST['settleYesBtn'])) settleDebt();

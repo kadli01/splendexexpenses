@@ -38,8 +38,6 @@
 			{
 				header('Location: account.php');
 			}else {
-				header('Location: index.php');
+				$_SESSION['loginError'] = "Wrong e-mail or password!";
 			}
-
-
 		}

@@ -11,6 +11,12 @@
 						</div>
 						<div class="item__text">
 							<p>Use your existing account to sign in.</p>
+							<?php 
+								if(isset($_SESSION['loginError'])){
+									echo '<p style="color: red">' . $_SESSION['loginError'] . "</p>";
+									unset($_SESSION['loginError']);
+								} 
+							?>
 						</div>
 						<div class="item__form">
 							<form  method="post">

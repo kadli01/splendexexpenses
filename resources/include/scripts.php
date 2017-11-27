@@ -2,6 +2,5 @@
 <script src="public/assets/js/popper.min.js"></script>
 <script src="public/assets/js/bootstrap.js"></script>
 <script src="public/assets/js/shards.js"></script>
-<script src="public/assets/js/global.js"></script>
 </body>
 </html>
