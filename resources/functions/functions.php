@@ -196,7 +196,9 @@ function newExpense() {
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
 				header('Location: show.php?accountId=' . $_GET["accountId"] . '');
 			}
-		} else {	$expenseError = "The numbers do not add up";
+
+		} else {	$expenseError = "Numbers don't add up!";
+
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
@@ -240,6 +242,7 @@ function getPaidFor($expenseId) {
 }
 
 function whoOwesWhat(){
+
 	include('connection.php');
 	$selectWow = $db->prepare("SELECT u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
