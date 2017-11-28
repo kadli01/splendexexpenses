@@ -5,7 +5,7 @@ include('connection.php');
 //check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
-        header('location:' . $config->app_url . 'index.php');
+        header('location:' . $config->app_url . '/index.php');
         exit();
     }
 }
@@ -236,7 +236,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 

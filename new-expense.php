@@ -18,7 +18,7 @@ foreach ($members as $member) {
 	}
 }
 if (!$isMember) {
-	header("location: " . $config->app_url . "account.php");
+	header("location: " . $config->app_url . "/account.php");
 }
 
 ?>
