@@ -33,9 +33,6 @@ function returnName(){
     }else{
     	return false;
     }
-
-
-
 }
 
 // update the Basic Info of the user
