@@ -10,8 +10,14 @@ if(!empty($_SESSION['expenseError'])){
 		unset($_SESSION['expenseError']);
 }
 
-if($_SESSION['user_id'] != $member['user_id']) {
-	header('Location: account.php');
+$isMember = false;
+foreach ($members as $member) {
+	if ($member['user_id'] == $_SESSION['user_id']) {
+		$isMember = true;
+	}
+}
+if (!$isMember) {
+	header("location: account.php");
 }
 
 ?>

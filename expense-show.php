@@ -7,7 +7,7 @@ $details = getExpenseDetails($_GET['expenseId']);
 $currency = getCurrency();
 $expenseId = $_GET['expenseId'];
 $paidForDetails = getPaidFor($expenseId);
-include('resources/functions/connection.php');
+//include('resources/functions/connection.php');
 ?>
 	
 	<section class="create">
