@@ -14,11 +14,11 @@ include('resources/include/header.php');
 							<h4>Basic Info</h4>
 							<div class="form-group">
 								<label for="name">Name</label>
-								<input type="text" name="name" class="form-control" value="<?php returnName(); ?>">
+								<input type="text" name="name" class="form-control" value="<?php echo returnName(); ?>">
 							</div>
 							<div class="form-group">
 								<label for="email">Email</label>
-								<input type="email" name="email" class="form-control" value="<?php  returnEmail(); ?>">
+								<input type="email" name="email" class="form-control" value="<?php echo returnEmail(); ?>">
 							</div>
 							<input type="submit" name="updateBasicBtn" class="btn btn-primary" value="Change">
 						</div>
