@@ -6,7 +6,7 @@ $accounts = getAccounts();
 $currency = getCurrency();
 if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 if(!empty($_SESSION['expenseError'])){
-	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">' . $_SESSION['expenseError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
 		unset($_SESSION['expenseError']);
 }
 
@@ -68,9 +68,9 @@ if (!$isMember) {
 							echo '<div class="item">';
 							echo '<div class="input-group">';
 							if(isset($_POST["paidFor"])){
-								echo '<input name="paidFor[' . $member['user_id'] . ']" value=' . $_POST['paidFor'][$member['user_id']] . ' step="0.5" type="number" class="form-control" min="0">';
+								echo '<input name="paidFor[' . $member['user_id'] . ']" value=' . $_POST['paidFor'][$member['user_id']] . ' step="0.5" type="number" class="form-control">';
 							}else{
-								echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" step="0.5" type="number" class="form-control min="0"">';
+								echo '<input name="paidFor[' . $member['user_id'] . ']" placeholder="0" step="0.5" type="number" class="form-control min="0"">';
 							}
 							echo '<span class="input-group-addon" id="basic-addon1">' . $currency[0] . '</span>';
 							echo '</div>';
