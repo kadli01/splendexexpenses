@@ -4,7 +4,7 @@ include('resources/functions/functions.php');
 isLoggedIn();
 
 if(isset($_SESSION['successMessage'])) {
-	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['successMessage'] . '</div>';	
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">' . $_SESSION['successMessage'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
 	unset($_SESSION['successMessage']);
 }
 include('resources/include/header.php');
@@ -31,6 +31,8 @@ if (!array_key_exists($accId, $details)) {
 							} else {
 								echo "http://via.placeholder.com/100x100";
 							}?>">
+							<br>
+							<?php echo '<a href="edit-account.php?accountId=' . $_GET['accountId'] . '" class="edit_account">Edit Account</a>'; ?>
 							<h3><?php echo $details[$accId]['account_name'];?></h3>
 							<span><?php 
 								if ($details[$accId]['currency'] === 'USD') {
@@ -47,8 +49,7 @@ if (!array_key_exists($accId, $details)) {
 									}
 								}
 
-							?></span>
-									
+							?></span>	
 						</div>
 						<div class="show__nav">
 							<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">

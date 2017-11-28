@@ -1,15 +1,13 @@
 <?php 
 include('resources/functions/functions.php');
 include('resources/include/head.php');
-isLoggedIn();
+include('resources/include/header.php');
 $peoples = getPeoples();
-if (!empty($_SESSION['createError'])) {
-	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">' . $_SESSION['createError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
-	unset($_SESSION['createError']);
-} 
-include('resources/include/header.php'); 
+$currency = getCurrency();
+$account = getAccountforUpdate();	
 ?>
-	<section class="create form">
+
+<section class="create form">
 		<div class="container">
 
 			<div class="row">
@@ -17,13 +15,22 @@ include('resources/include/header.php');
 					<form action="resources/functions/create-account.php" method="post" enctype = "multipart/form-data">
 						<div class="form-group">
 							<label for="">Account Name</label>
-							<input type="text" class="form-control" name="name" maxlength="30">
+							<?php if(isset($account)){
+									echo '<input type="text" class="form-control" name="name" maxlength="30" value="' . $account['account_name'] . '">';
+								} ?>
 						</div>
 						<div class="form-group">
 							<label for="">Currency</label>
 							<select name="currency" id="currency" class="form-control">
-								<option value="HUF">HUF (Ft)</option>
-								<option value="USD">USD ($)</option>
+								<?php
+								if($currency == 'HUF'){
+									echo '<option value="HUF" selected>HUF (Ft)</option>';
+									echo '<option value="USD">USD ($)</option>';
+								}else{
+									echo '<option value="HUF">HUF (Ft)</option>';
+									echo '<option value="USD" selected>USD ($)</option>';
+								}
+								?>
 							</select>
 						</div>
 						<div class="form-group">
@@ -36,26 +43,25 @@ include('resources/include/header.php');
 										<span class="custom-control-indicator"></span>
 										<?php if ($people['user_name']):  ?>
 										<span class="custom-control-description"><?php echo $people['user_name']; ?>
-
-											<?php else: echo "Unknown - " . $people['email']; ?>
-											<?php endif; ?>
+										<?php else: echo "Unknown - " . $people['email']; ?>
+										<?php endif; ?>
 										</span>
 									</label>
 								</div>
 								
 								<?php endforeach; ?>
+
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="">Upload Cover Image</label>
 							<input type="file" name="image" accept="image/*">
 						</div>
-						<input type="submit" name="create" value="Create" class="btn btn-primary">
+						<input type="submit" name="updateAccBtn" value="Update" class="btn btn-primary">
 					</form>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	
 <?php include('resources/include/scripts.php'); ?>

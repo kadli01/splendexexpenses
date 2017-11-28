@@ -49,12 +49,12 @@ function updateBasicInfo(){
 				$updateBasic = $GLOBALS['db']->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
 				$updateBasic->execute([$_POST['name'], $_POST['email'], $_SESSION['user_id']]);
 
-				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Basic Info updated successfully!</div>';
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Basic Info updated successfully!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
 					
 			}elseif(empty($_POST['name'])){
-				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The name field must be filled out!</div>';
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The name field must be filled out!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
 			}else{
-				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The email address you provided is already in use!</div>';
+				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The email address you provided is already in use!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
 			}
 		}
 	}
@@ -79,9 +79,9 @@ function updatePassword() {
 		echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">Password updated successfully!</div>';
 		
     }elseif($_POST['oldPwd'] != password_verify($_POST['oldPwd'], $passwordItem[0])){
-    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">You entered your old password incorrectly. Please try again!</div>';
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">You entered your old password incorrectly. Please try again!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
     } else {
-    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">The given data dosen\'t match!</div>';
+    	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The given data dosen\'t match!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
     }
 }
 
@@ -236,7 +236,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
@@ -331,3 +331,12 @@ function settleDebt(){
 }
 
 if(isset($_POST['settleYesBtn'])) settleDebt();
+
+function getAccountforUpdate(){
+	$account = $GLOBALS['db']->prepare("SELECT account_name FROM accounts WHERE account_id = ?");
+	$account->execute([$_GET['accountId']]);
+	$accountName = $account->fetch(PDO::FETCH_ASSOC);
+	//var_dump($accountItem);
+	return $accountName;
+}
+if(isset($_POST['updateAccBtn'])) getAccountforUpdate();

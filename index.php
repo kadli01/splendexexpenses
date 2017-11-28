@@ -2,6 +2,11 @@
 session_start();
 include('resources/include/head.php');
 include('resources/functions/login.php');
+if(isset($_SESSION['user_id'])){
+	include('resources/functions/config.php');
+    header('location:' . $config->app_url . '/account.php');
+    exit();
+    }
 ?>
 	<section class="auth">
 		<div class="container">
