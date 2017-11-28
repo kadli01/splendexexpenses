@@ -17,7 +17,7 @@ $dir ="public/uploads/";
 $wow = whoOwesWhat();
 
 if (!array_key_exists($accId, $details)) {
-	header("location: account.php");
+	header("location: " . $config->app_url . "account.php");
 }
 ?>
 	<section class="account-show">

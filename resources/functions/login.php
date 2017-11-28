@@ -36,7 +36,7 @@
 			
 			if($emailItem[0] == $email && password_verify($password, $passwordItem[0]))
 			{
-				header('Location: account.php');
+				header('Location:'. $config->app_url . 'account.php');
 			}else {
 				$_SESSION['loginError'] = "Wrong e-mail or password!";
 			}

@@ -53,10 +53,10 @@ if (isset($_POST['create'])) {
 	}
 	if (!isset($errorMessage)) {
 		$_SESSION['createError'] = "Successfully added new account.";
-		header('location: /splendexexpenses/account.php');
+		header('location:' . $config->app_url . 'account.php');
 	} else {
 		$_SESSION['createError'] = $errorMessage;
-		header('location: /splendexexpenses/new-account.php');
+		header('location:' . $config->app_url . 'new-account.php');
 	}
 
 }
