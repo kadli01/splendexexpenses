@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('connection.php');
+
 //check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
@@ -133,7 +134,6 @@ function getPeoples($accId = null){
     }else{
     	return false;
     }
-
 }
 
 //get the members of the account from the db
@@ -202,6 +202,7 @@ function getExpenseDetails($expenseId){
     	return false;
     }
 }
+
 // get the currency of the account
 function getCurrency() {
 	$currency = $GLOBALS['db']->prepare("SELECT currency FROM accounts WHERE account_id = ?");
@@ -223,7 +224,12 @@ function newExpense() {
 		$total += $value;
 	}
 
-	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker']) {
+	foreach ($_POST['paidFor'] as $key => $value) {
+		if($value == null){
+			$_POST['paidFor'][$key] = 0;
+		}
+	}	
+	if($_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker']) {
 		$createdAt = $_POST['datepicker'];
 		if ($total == $_POST['amount']) {
 			$expense = $GLOBALS['db']->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, expense_date, created_at, updated_at) VALUES(?, ?, ?, ?, ?, NOW(), NOW())");
@@ -269,7 +275,8 @@ function getBalance($userId){
 	$debt = $selectDebt->fetchAll(PDO::FETCH_ASSOC);
 	$debt['paid'] = $paid[0]['sum(pf.debt)'];
 	$paid = null;
-	if (isset($debt)) {
+
+	if ($debt) {
 		return $debt;
 	} else { return 0; }
 }
