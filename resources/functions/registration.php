@@ -1,54 +1,45 @@
 <?php
 include "connection.php";
 session_start();
-
 if (isset($_POST['signup'])) {
-	foreach($_POST as $key=>$value) {
-		if(empty($_POST[$key])) {
+	var_dump($_POST);
+	if (!$_POST["regEmail"] && !$_POST["regPassword"] && !$_POST["regPasswordAgain"]) {
 		$errorMessage = "All Fields are required";
-		break;
-		}
 	}
-
-	//if(!isset($errorMessage) && !empty($_POST["regEmail"])){
-	//	if(!filter_var($_POST["regEmail"], FILTER_VALIDATE_EMAIL )){
-	//		$errorMessage = "Invalid email format";
-	//	} else {
-	//		$regEmail = trim(filter_input(INPUT_POST,"regEmail",FILTER_SANITIZE_STRING));
-	//	}
-	//}
-
-	if(/*!isset($errorMessage) &&*/ !empty($_POST["regEmail"])){
+	
+	if(!isset($errorMessage) && !empty($_POST["regEmail"])){
 		$regEmail = trim(filter_input(INPUT_POST,"regEmail",FILTER_SANITIZE_STRING));
+	} elseif(!isset($errorMessage) && empty($_POST["regEmail"])){
+		$errorMessage = "Fill in the email field to register."; 
 	}
-
-	if(!filter_var($regEmail, FILTER_VALIDATE_EMAIL )){
+	if(!filter_var($regEmail, FILTER_VALIDATE_EMAIL ) && !isset($errorMessage)){
 		$errorMessage = "Invalid email format";
 	}
 
-	if(!empty($_POST["regPassword"])){
+	if(!isset($errorMessage) && !empty($_POST["regPassword"])){
 		$regPassword = trim(filter_input(INPUT_POST,"regPassword",FILTER_SANITIZE_STRING));
+	} elseif (!isset($errorMessage) && empty($_POST["regPassword"])) {
+		$errorMessage = "Password is required";
 	}
-	if(!empty($_POST["regPasswordAgain"])){
+	if(!isset($errorMessage) && !empty($_POST["regPasswordAgain"])){
 		$regPasswordAgain = trim(filter_input(INPUT_POST,"regPasswordAgain",FILTER_SANITIZE_STRING));
+	} elseif (!isset($errorMessage) && empty($_POST["regPasswordAgain"])){
+		$errorMessage = "Password again is required";
 	}
+
 	if ($regPassword !== $regPasswordAgain) {
 		$errorMessage = "The passwords are not matching";
 	}
-	//if(!isset($errorMessage)) {
-		if(!isset($_POST["terms"])) {
+		if(!isset($errorMessage) && !isset($_POST["terms"])) {
 			$errorMessage = "Accept Terms and Conditions to Register";
 		}
-	//}
-
-
 	try{
 		$result = $db->prepare("SELECT email FROM users 
 								WHERE email = ?");
 		$result->execute([$regEmail]);
 		$item = $result->fetch();
-		if ($item[0] == $regEmail) {
-			$errorMessage = "This email address is already registerd.";
+		if ($item[0] == $regEmail && $regEmail) {
+			$errorMessage = "This email address is already registered.";
 			header('location:'  . $config->app_url . '/index.php');
 		} elseif(isset($errorMessage)) {
 			header('location:' . $config->app_url . '/index.php');
@@ -64,7 +55,6 @@ if (isset($_POST['signup'])) {
 				$userId = $idResult->fetch();
 				$_SESSION['user_id'] = $userId[0];
 				$_SESSION['is_logged_in'] = true;
-				var_dump($_SESSION['userId']);
 				header('location:' . $config->app_url . '/account.php');
 			} else {
 				$_SESSION['is_logged_in'] = false;
@@ -77,5 +67,3 @@ if (isset($_POST['signup'])) {
 		echo $e->getMessage();
 	}
 }
-
-

@@ -51,9 +51,13 @@ if (!empty($_SESSION['createError'])) {
 									}
 									?></span>
 								<div class="content__icons">
+									<?php $members = getMembers($account['account_id']); 
+									$i = 0;
+									foreach ($members as $member): ?>
 									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
-									<i class="fa fa-user"></i>
+									<?php endforeach; ?>
+									<!-- <i class="fa fa-user"></i> -->
+									<!-- <i class="fa fa-user"></i> -->
 								</div>
 							</div>
 						</div>

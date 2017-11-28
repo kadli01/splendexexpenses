@@ -41,10 +41,15 @@ $paidForDetails = getPaidFor($expenseId);
 								<select name="" id="" class="form-control" disabled="">
 									<option value="">
 										<?php 	
-										$select = $db->prepare("SELECT user_name FROM users WHERE user_id = ?");
+										$select = $db->prepare("SELECT user_name, email FROM users WHERE user_id = ?");
     									$select->execute([$details['paid_by']]); 
     									$paidBy = $select->fetch(PDO::FETCH_ASSOC);
-    									echo ( $paidBy['user_name']);
+    										
+    										if ($paidBy['user_name']) {
+    											echo ($paidBy['user_name']);
+    										} else {
+    											echo "Unknown - " . $paidBy['email'];
+    										}
     									?>	
     								</option>
 								</select>
@@ -55,7 +60,11 @@ $paidForDetails = getPaidFor($expenseId);
 							<?php foreach ($paidForDetails as $paidForDetail):
 								echo '<div class="d-flex">';
 								echo '<div class="item">';
-								echo '<p>' . $paidForDetail['user_name'] . '</p>';
+								if ($paidForDetail['user_name']) {
+									echo '<p>' . $paidForDetail['user_name'] . '</p>';
+								} else {
+									echo '<p>Unknown - ' . $paidForDetail['email'] . '</p>';
+								}
 								echo '</div>';
 								echo '<div class="item">';
 								echo '<div class="input-group">';

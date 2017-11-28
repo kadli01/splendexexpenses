@@ -15,7 +15,6 @@ $currency = getCurrency();
 $accId = $_GET['accountId'];
 $dir ="public/uploads/"; 
 $wow = whoOwesWhat();
-
 if (!array_key_exists($accId, $details)) {
 	header("location: " . $config->app_url . "/account.php");
 }
@@ -129,12 +128,13 @@ if (!array_key_exists($accId, $details)) {
 										<?php 
 										if(!empty($wow)){
 											foreach ($wow as $i => $w):
+											//	var_dump($w);
 											?>
 											<div class="d-flex">
 												<div class="item"?>
 												<?php 
-													echo '<a href=""><p>' . $w['user_name'] .  '</p></a>'; 
-													echo '<span>Owes ' . $w[0]['user_name'] . '</span>'; 
+													echo '<a href=""><p>' . $w['user_name'] .  '</p></a>'; 			
+													echo '<span>Owes ' . $w['pb_name'] . '</span>'; 
 												?>
 											</div>
 											<div class="item">
@@ -214,7 +214,11 @@ if (!array_key_exists($accId, $details)) {
 												echo '<div class="d-flex">';
 												echo '<div class="item">';
 												echo '<a href="expense-show.php?accountId=' . $_GET["accountId"] . '&' . 'expenseId='.$expenses{$i}["expense_id"] . '"><p>' . $expenses{$i}["expense_name"] . '</p></a>';
-												echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>';
+												if ($expenses{$i}["user_name"]) {
+													echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>';
+												} else {
+													echo '<span>' . 'Unknown' . ' paid for it</span>';
+												}
 												echo '<span class="d-block">' . $expenses{$i}['expense_date'] .  '</span>';
 												echo '</div>';
 												echo '<div class="item">';

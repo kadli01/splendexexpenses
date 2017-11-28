@@ -236,7 +236,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
@@ -281,9 +281,9 @@ function getBalance($userId){
 	
 
 function getPaidFor($expenseId) {
-	$details = $GLOBALS['db']->prepare("SELECT pf.paid_for, u.user_name, pf.debt FROM paid_for pf LEFT JOIN users u ON pf.paid_for = u.user_id WHERE expense_id = ?");
+	$details = $GLOBALS['db']->prepare("SELECT pf.paid_for, u.user_name, pf.debt, u.email FROM paid_for pf LEFT JOIN users u ON pf.paid_for = u.user_id WHERE expense_id = ?");
 	$details->execute([$expenseId]);
-	$detailsItems = $details->fetchAll();
+	$detailsItems = $details->fetchAll(PDO::FETCH_ASSOC);
 
 	if(isset($detailsItems)){
 		return $detailsItems;
@@ -305,16 +305,21 @@ function whoOwesWhat(){
     $wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);  
     $result = array();
     foreach ($wow as $w) {
-        $userName = $GLOBALS['db']->prepare("SELECT user_name FROM users WHERE user_id = ?");
-        $userName->execute([$w['paid_by']]);
-        $userNameItem = $userName->fetch(PDO::FETCH_ASSOC);
+        $selectPaidBy = $GLOBALS['db']->prepare("SELECT user_name, email FROM users WHERE user_id = ?");
+        $selectPaidBy->execute([$w['paid_by']]);
+        $paidBy = $selectPaidBy->fetch(PDO::FETCH_ASSOC);
+        
         if (!$w['user_name']) {
         	$w['user_name'] = "Unknown - " . $w['email']; 
+        } 
+        if (!$paidBy['user_name']) {
+        	$w['pb_name'] = "Unknown - " . $paidBy['email']; 
+        } else {
+        	$w['pb_name'] = $paidBy['user_name'];
         }
-        array_push($w, $userNameItem);
+
         $result[] = $w;
     }
-
     if(isset($result)){
     	return $result;
     }else{

@@ -43,7 +43,7 @@ if (!$isMember) {
 							</div>
 							<div class="form-group">
 								<label for="amount">Amount</label>
-								<input name="amount" step="0.5" type="number" class="form-control" value="<?php if(isset($_POST['amount'])) echo $_POST['amount']; ?>">
+								<input name="amount" step="0.5" type="number" class="form-control" value="<?php if(isset($_POST['amount'])) echo $_POST['amount']; ?>" min="0">
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
