@@ -26,10 +26,11 @@ function returnName(){
 	$userName = $GLOBALS['db']->prepare("SELECT user_name FROM users WHERE user_id = ?");
     $userName->execute([$_SESSION['user_id']]);
     $userNameItem = $userName->fetch();
-
-    echo ($userNameItem[0]);
-
-
+   if(isset($userNameItem)){
+    	return $userNameItem[0];
+    }else{
+    	return false;
+    }
 }
 
 // update the Basic Info of the user
@@ -223,12 +224,6 @@ function newExpense() {
 if(isset($_POST['createExpenseBtn'])) newExpense();
 
 function getBalance($userId){
-		
-	// $selectPaid = $GLOBALS['db']->prepare("SELECT sum(amount) FROM expenses e
-	// 							LEFT JOIN paid_for pf
-	// 							ON e.expense_id = pf.expense_id
-	// 							WHERE e.account_id = ? && e.paid_by = ? && pf.paid_by<>pf.paid_for");
-
 	$selectPaid = $GLOBALS['db']->prepare("SELECT sum(pf.debt) FROM expenses e
 								LEFT JOIN paid_for pf
 								ON e.expense_id = pf.expense_id
@@ -263,16 +258,6 @@ function getPaidFor($expenseId) {
 }
 
 function whoOwesWhat(){
-	
-	// $selectWow = $GLOBALS['db']->prepare("SELECT u.email, e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
- //                                FROM paid_for pf 
- //                                LEFT JOIN users u 
- //                                ON pf.paid_for = u.user_id 
- //                                LEFT JOIN expenses e
- //                                ON pf.expense_id = e.expense_id
- //                                WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
- //                                GROUP BY u.user_name, pf.paid_by, pf.paid_for, e.expense_id");
-
 	$selectWow = $GLOBALS['db']->prepare("SELECT u.email, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
                                 LEFT JOIN users u 
@@ -299,7 +284,6 @@ function whoOwesWhat(){
 }
 
 function settleDebt(){
-	
 	$sql = $GLOBALS['db']->prepare("DELETE FROM paid_for WHERE paid_for = ? AND paid_by = ?");
 	$sql->execute([$_POST['paidFor'], $_POST['paidBy']]);
 
