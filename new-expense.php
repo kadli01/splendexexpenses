@@ -10,6 +10,7 @@ if(!empty($_SESSION['expenseError'])){
 		unset($_SESSION['expenseError']);
 }
 
+
 $isMember = false;
 foreach ($members as $member) {
 	if ($member['user_id'] == $_SESSION['user_id']) {
@@ -17,7 +18,7 @@ foreach ($members as $member) {
 	}
 }
 if (!$isMember) {
-	header("location: account.php");
+	header("location: /" . $config->app_url . "account.php");
 }
 
 ?>

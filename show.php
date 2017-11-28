@@ -194,10 +194,12 @@ if (!array_key_exists($accId, $details)) {
 													$isMember = true;
 												}
 											}
-											if ($isMember) {
-												echo '<p>There are no expenses in this account yet. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
-											}else{
-												echo '<p>There are no expenses in this account yet. You dont have permission to add one.</p><br>';
+											if(!$wow){
+												if ($isMember) {
+													echo '<p>There are no expenses in this account yet. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
+												}else{
+													echo '<p>There are no expenses in this account yet. You dont have permission to add one.</p><br>';
+												}
 											}
 											 ?>
 											
