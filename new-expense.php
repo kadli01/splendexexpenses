@@ -67,9 +67,9 @@ if (!$isMember) {
 							echo '<div class="item">';
 							echo '<div class="input-group">';
 							if(isset($_POST["paidFor"])){
-								echo '<input name="paidFor[' . $member['user_id'] . ']" value=' . $_POST['paidFor'][$member['user_id']] . ' step="0.5" type="number" class="form-control">';
+								echo '<input name="paidFor[' . $member['user_id'] . ']" value=' . $_POST['paidFor'][$member['user_id']] . ' step="0.5" type="number" class="form-control" min="0">';
 							}else{
-								echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" step="0.5" type="number" class="form-control">';
+								echo '<input name="paidFor[' . $member['user_id'] . ']" value="0" step="0.5" type="number" class="form-control min="0"">';
 							}
 							echo '<span class="input-group-addon" id="basic-addon1">' . $currency[0] . '</span>';
 							echo '</div>';
