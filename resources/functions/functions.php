@@ -264,14 +264,23 @@ function getPaidFor($expenseId) {
 
 function whoOwesWhat(){
 	include('connection.php');
-	$selectWow = $db->prepare("SELECT u.email, e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
+	// $selectWow = $db->prepare("SELECT u.email, e.expense_id, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
+ //                                FROM paid_for pf 
+ //                                LEFT JOIN users u 
+ //                                ON pf.paid_for = u.user_id 
+ //                                LEFT JOIN expenses e
+ //                                ON pf.expense_id = e.expense_id
+ //                                WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
+ //                                GROUP BY u.user_name, pf.paid_by, pf.paid_for, e.expense_id");
+
+	$selectWow = $db->prepare("SELECT u.email, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
                                 LEFT JOIN users u 
                                 ON pf.paid_for = u.user_id 
                                 LEFT JOIN expenses e
                                 ON pf.expense_id = e.expense_id
                                 WHERE pf.debt > 0 && e.account_id = ? && pf.paid_by <> pf.paid_for
-                                GROUP BY u.user_name, pf.paid_by, pf.paid_for, e.expense_id");
+                                GROUP BY u.user_name, pf.paid_by, pf.paid_for");
     $selectWow->execute([$_GET['accountId']]);
     $wow = $selectWow->fetchAll(PDO::FETCH_ASSOC);  
     $result = array();

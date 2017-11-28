@@ -9,14 +9,15 @@ if(!empty($_SESSION['expenseError'])){
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
 		unset($_SESSION['expenseError']);
 }
+
 $isMember = false;
 foreach ($members as $member) {
-	if($member['user_id'] == $_SESSION['user_id']){
+	if ($member['user_id'] == $_SESSION['user_id']) {
 		$isMember = true;
 	}
 }
-if(!$isMember){
-	header('Location: account.php');
+if (!$isMember) {
+	header("location: account.php");
 }
 
 ?>
