@@ -188,9 +188,11 @@ if (!array_key_exists($accId, $details)) {
 												</div>
 											</div>
 											<?php endforeach; 
-											}else {
-												echo '<p>There are no expenses yet in this account. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
-											} 
+											}elseif($_SESSION['user_id'] == $member['user_id']) {
+												echo '<p>There are no expenses in this account yet. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
+											} else {
+												echo '<p>There are no expenses in this account yet. You dont have permission to add one.</p><br>';
+											}
 											?>
 									</div>
 								</div>
