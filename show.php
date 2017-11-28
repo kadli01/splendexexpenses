@@ -16,6 +16,10 @@ $currency = getCurrency();
 $accId = $_GET['accountId'];
 $dir ="public/uploads/"; 
 $wow = whoOwesWhat();
+
+if (!array_key_exists($accId, $details)) {
+	header("location: account.php");
+}
 ?>
 	<section class="account-show">
 		<div class="container">

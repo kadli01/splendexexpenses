@@ -9,7 +9,10 @@ if(!empty($_SESSION['expenseError'])){
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
 		unset($_SESSION['expenseError']);
 }
-
+var_dump($accounts);
+// if (!array_key_exists($accId, $accounts)) {
+// 	header("location: account.php");
+// }
 ?>
 <?php include('resources/include/header.php'); ?>
 	

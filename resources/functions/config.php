@@ -1,11 +1,10 @@
 <?php 
-$config;
 $config['host'] = 'localhost';
 $config['dbname'] = 'splendex_expenses';
 $config['user'] = 'root';
 $config['pass'] = '123456';
 $config['maxFileSize'] = 5000000; 
-
+$config = (object) $config;
 
 // function settings($index){
 // 	if ($config[$index]) {
@@ -15,9 +14,9 @@ $config['maxFileSize'] = 5000000;
 // 	}
 // }
 
-$GLOBALS['config'] = $config;
-$host = 'localhost';
-$dbname = 'splendex_expenses';
-$user = 'root';
-$pass = '123456';
+ $GLOBALS['config'] =  $config;
+// $host = 'localhost';
+// $dbname = 'splendex_expenses';
+// $user = 'root';
+// $pass = '123456';
 ?>
