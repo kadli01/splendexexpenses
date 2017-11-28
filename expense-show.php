@@ -7,7 +7,6 @@ $details = getExpenseDetails($_GET['expenseId']);
 $currency = getCurrency();
 $expenseId = $_GET['expenseId'];
 $paidForDetails = getPaidFor($expenseId);
-include('resources/functions/connection.php');
 ?>
 	
 	<section class="create">
@@ -33,8 +32,8 @@ include('resources/functions/connection.php');
 							</div>
 							<div class="form-group">
 								<label for="">Date</label>
-								<input type="text" class="form-control" value="<?php  $time =strtotime($details['created_at']);
-									 echo ( date('Y/m/d',$time));
+								<input type="text" class="form-control" value="<?php  $time = strtotime($details['created_at']);
+									 echo (date('Y/m/d',$time));
 								 ?>" disabled="">
 							</div>
 							<div class="form-group">

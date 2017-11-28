@@ -2,7 +2,7 @@
 $config['host'] = 'localhost';
 $config['dbname'] = 'splendex_expenses';
 $config['user'] = 'root';
-$config['pass'] = '123456';
+$config['pass'] = 'admin';
 $config['maxFileSize'] = 5000000; 
 $config = (object) $config;
 
@@ -19,6 +19,6 @@ $config = (object) $config;
 // $host = 'localhost';
 // $dbname = 'splendex_expenses';
 // $user = 'root';
-// $pass = '123456';
+// $pass = 'admin';
 
 ?>

@@ -7,7 +7,6 @@ if(isset($_SESSION['successMessage'])) {
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success">' . $_SESSION['successMessage'] . '</div>';	
 	unset($_SESSION['successMessage']);
 }
-
 include('resources/include/header.php');
 $expenses = getExpenses($_GET['accountId']);
 $details = getAccounts($_GET['accountId']);
@@ -206,7 +205,7 @@ if (!array_key_exists($accId, $details)) {
 												echo '<div class="item">';
 												echo '<a href="expense-show.php?accountId=' . $_GET["accountId"] . '&' . 'expenseId='.$expenses{$i}["expense_id"] . '"><p>' . $expenses{$i}["expense_name"] . '</p></a>';
 												echo '<span>' . $expenses{$i}["user_name"] . ' paid for it</span>';
-												echo '<span class="d-block">' . $expenses{$i}['created_at'] .  '</span>';
+												echo '<span class="d-block">' . $expenses{$i}['expense_date'] .  '</span>';
 												echo '</div>';
 												echo '<div class="item">';
 												if($currency[0] == 'HUF'){

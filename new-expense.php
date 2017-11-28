@@ -9,8 +9,13 @@ if(!empty($_SESSION['expenseError'])){
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger">' . $_SESSION['expenseError'] . '</div>';	
 		unset($_SESSION['expenseError']);
 }
-
-if($_SESSION['user_id'] != $member['user_id']) {
+$isMember = false;
+foreach ($members as $member) {
+	if($member['user_id'] == $_SESSION['user_id']){
+		$isMember = true;
+	}
+}
+if(!$isMember){
 	header('Location: account.php');
 }
 
@@ -40,7 +45,7 @@ if($_SESSION['user_id'] != $member['user_id']) {
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
-								<input name="date" type="text" class="form-control" id="datepicker" value="">
+								<input name="datepicker" type="text" class="form-control" id="datepicker" value="">
 							</div>
 							<div class="form-group">
 								<label for="">Paid by</label>
@@ -85,7 +90,7 @@ if($_SESSION['user_id'] != $member['user_id']) {
 			calendarWeeks: true,
 	    	autoclose: true,
     		todayHighlight: true,
-    		dateFormat: 'yy/mm/dd',
+    		format: 'yyyy/mm/dd',
     	}).datepicker("setDate", new Date());
 	});
 	</script>

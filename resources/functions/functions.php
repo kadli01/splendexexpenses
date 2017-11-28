@@ -194,10 +194,11 @@ function newExpense() {
 		$total += $value;
 	}
 
-	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName']) {
+	if(!in_array(null, $_POST['paidFor']) && $_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker']) {
+		$createdAt = $_POST['datepicker'];
 		if ($total == $_POST['amount']) {
-			$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, created_at, updated_at) VALUES(?, ?, ?, ?, NOW(), NOW())");
-			$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy']]);
+			$expense = $db->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, expense_date, created_at, updated_at) VALUES(?, ?, ?, ?, ?, NOW(), NOW())");
+			$expense->execute([$_GET['accountId'], $_POST['expenseName'], $_POST['amount'], $_POST['paidBy'], $createdAt]);
 			$expenseId = $db->lastInsertId();
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $db->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
