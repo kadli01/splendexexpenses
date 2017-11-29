@@ -59,6 +59,7 @@ if (!empty($_SESSION['createError'])) {
 											echo '<i class="fa fa-user"></i>';
 										} else { 
 											echo '<i class="fa">+</i>';
+											break;
 										}
 									}?>
 									<!-- <i class="fa fa-user"></i> -->

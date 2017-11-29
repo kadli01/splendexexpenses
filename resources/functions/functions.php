@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('connection.php');
-//include('csrf.php');
 
 //check if user is logged in
 function isLoggedIn(){
@@ -224,11 +223,17 @@ function newExpense() {
 	}
 
 	foreach ($_POST['paidFor'] as $key => $value) {
-		if($value == null){
+		if($value == null ){
 			$_POST['paidFor'][$key] = 0;
 		}
+		if ($value < 0) {
+			$expenseError = "All numbers must be greater than 0";
+		}
 	}	
-	if($_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker']) {
+	if ($_POST['amount'] <= 0 ) {
+		$expenseError = "All numbers must be greater than 0";
+	}
+	if($_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker'] && !isset($expenseError)) {
 		$createdAt = $_POST['datepicker'];
 		if ($total == $_POST['amount']) {
 			$expense = $GLOBALS['db']->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, expense_date, created_at, updated_at) VALUES(?, ?, ?, ?, ?, NOW(), NOW())");
@@ -241,14 +246,17 @@ function newExpense() {
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
-		} else {	$expenseError = "Numbers don't add up!";
+		} elseif(!isset($expenseError) ){	$expenseError = "Numbers don't add up!";
 
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
 
-	} else {
+	} elseif(!isset($expenseError) ) {
 		$expenseError = "You need to fill out all fields!";
+		$_SESSION['expenseError'] = $expenseError;
+		return false;
+	} else { 
 		$_SESSION['expenseError'] = $expenseError;
 		return false;
 	}

@@ -19,7 +19,7 @@ if (isset($_POST['create'])) {
  		$extensions= array("jpg", "jpeg", "png", "gif");
   		if(!in_array($fileExt,$extensions)){
      		$errorMessage = "Extension not allowed, please choose a JPG, JPEG, GIF or PNG file.";
-  		} elseif ($_FILES['image']['size'] > 5000000) {
+  		} elseif ($_FILES['image']['size'] > $config->maxFileSize) {
   			$errorMessage = "Sorry, your file is too large.";
   		} else {
   			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
@@ -65,11 +65,6 @@ function addPeople($accId){
 	require('connection.php');
 	$result = array();
 	foreach ($_POST['people'] as $person) {
-		var_dump($person);
-		// $selectUserId = $db->prepare("SELECT user_id FROM users WHERE user_id = ?");
-		// $selectUserId->execute([$person['user_id']]);
-		// $userId = $selectUserId->fetch();
-
 		$insert = $db->prepare("INSERT INTO users_accounts(user_id, account_id) VALUES(?, ?)");
 		array_push($result, $insert->execute([$person, $accId]));
 	}
