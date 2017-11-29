@@ -347,7 +347,7 @@ function getAccountforUpdate(){
 	}else{ return false; }
 }
 function getAccountMembersForUpdate(){
-	$members = $GLOBALS['db']->prepare("SELECT ua.user_id FROM users_accounts ua WHERE account_id = ?");
+	$members = $GLOBALS['db']->prepare("SELECT ua.user_id, u.user_name, u.email FROM users_accounts ua LEFT JOIN users u ON ua.user_id = u.user_id  WHERE account_id = ?");
 	$members->execute([$_GET['accountId']]);
 	$membersItems = $members->fetchAll(PDO::FETCH_ASSOC);
 	if(isset($membersItems)){
