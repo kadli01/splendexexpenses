@@ -56,7 +56,7 @@ if (isset($_POST['create'])) {
 	}
 	if (!isset($errorMessage)) {
 		$_SESSION['createError'] = "Successfully added new account.";
-		header('location: ' . $config->app_url . '/account.php');
+		header('location: ' . $config->app_url . '/show.php?accountId=' . $accId);
 	} else {
 		$_SESSION['createError'] = $errorMessage;
 		header('location: ' . $config->app_url . '/new-account.php');
