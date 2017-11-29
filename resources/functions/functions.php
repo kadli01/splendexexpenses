@@ -364,43 +364,62 @@ function getAccountMembersForUpdate(){
 	}else{ return false; }
 }
 
-function updateAccount(){
-	if(!$_POST['people']) {
-		$errorMessage = "Please select people"; 
+function updateAccountPeople(){
+	if(isset($_POST['people'])){
+		$sql = $GLOBALS['db']->prepare("DELETE FROM users_accounts WHERE account_id = ?");
+				$sql->execute([$_GET['accountId']]);
+		foreach ($_POST['people'] as $person) {	
+			$sql = $GLOBALS['db']->prepare("INSERT INTO users_accounts(user_id, account_id) VALUES(?, ?)");
+			$sql->execute([$person, $_GET['accountId']]);
+		}
+	}else {
+		$_SESSION['accUpdatePeopleError'] = "Please choose people you want to be in this account!";
+		return false;
 	}
-
-	//update accounts table
-	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, image = ?, updated_at = NOW() WHERE account_id = ?");
-	$updateAccount->execute([$name, $_POST['currency'], $image, $_GET['accountId']]);
-
-	//header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
-}	
-
-if(isset($_POST['updateAccBtn'])) updateAccount();
+}
 
 function updateAccountImage(){
 	include('config.php');
-	$targetDir = $config->app_url . "public/uploads";
+	$targetDir = "public/uploads";
+	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
+
+	var_dump($targetFile);
 	if (empty($_POST['name'])) {
 		$errorMessage = "Account Name is required.";
 	} else { 
 		$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 	}
-	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
+	if (!empty($_POST['currency'])) {
+		$currency = $_POST['currency'];
+	}
 	if (!empty($_FILES['image']) && $_FILES['image']['size'] > 0) {
 		$image = $_FILES['image']['name'];
-		$fileExt = strtolower(end(explode('.',$image)));
- 		$extensions = array("jpg", "jpeg", "png", "gif");
+		$fileExt=strtolower(end(explode('.',$image)));
+ 		$extensions= array("jpg", "jpeg", "png", "gif");
   		if(!in_array($fileExt,$extensions)){
      		$errorMessage = "Extension not allowed, please choose a JPG, JPEG, GIF or PNG file.";
-  		} elseif ($_FILES['image']['size'] > 5000000) {
+  		} elseif ($_FILES['image']['size'] > $config->maxFileSize) {
   			$errorMessage = "Sorry, your file is too large.";
   		} else {
   			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-		        //echo "The file ". basename( $_FILES['image']['name']). " has been uploaded.";
+		         $updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET image = ? WHERE account_id = ?");
+				$updateAccount->execute([$image, $_GET['accountId']]);
 		    } else {
+		    	echo "string";
 		        $errorMessage = "Sorry, there was an error uploading your file.";
 		    }
   		}
 	}
 }
+function updateAccount(){
+	//update accounts table
+	include('config.php');
+	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
+	$updateAccount->execute([$_POST['name'], $_POST['currency'], $_GET['accountId']]);
+
+	updateAccountPeople();
+	updateAccountImage();
+	$_SESSION['successMessage'] = "Successfully updated account!";
+	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
+}
+if(isset($_POST['updateAccBtn'])) updateAccount();
