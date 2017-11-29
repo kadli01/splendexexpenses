@@ -341,7 +341,17 @@ function getAccountforUpdate(){
 	$account = $GLOBALS['db']->prepare("SELECT account_name FROM accounts WHERE account_id = ?");
 	$account->execute([$_GET['accountId']]);
 	$accountName = $account->fetch(PDO::FETCH_ASSOC);
-	//var_dump($accountItem);
-	return $accountName;
+	if(isset($accountName)){
+		return $accountName;
+	}else{ return false; }
 }
-if(isset($_POST['updateAccBtn'])) getAccountforUpdate();
+function getAccountMembersForUpdate(){
+	$members = $GLOBALS['db']->prepare("SELECT ua.user_id FROM users_accounts ua WHERE account_id = ?");
+	$members->execute([$_GET['accountId']]);
+	$membersItems = $members->fetchAll(PDO::FETCH_ASSOC);
+	if(isset($membersItems)){
+		return $membersItems;
+	}else{ return false; }
+}
+
+if(isset($_POST['updateAccBtn'])) getAccountMembersForUpdate();

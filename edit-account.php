@@ -4,7 +4,9 @@ include('resources/include/head.php');
 include('resources/include/header.php');
 $peoples = getPeoples();
 $currency = getCurrency();
-$account = getAccountforUpdate();	
+$account = getAccountforUpdate();
+$orignalMembers = getAccountMembersForUpdate();
+var_dump($orignalMembers);	
 ?>
 
 <section class="create form">
@@ -12,7 +14,7 @@ $account = getAccountforUpdate();
 
 			<div class="row">
 				<div class="col-4">
-					<form action="resources/functions/create-account.php" method="post" enctype = "multipart/form-data">
+					<form action="" method="post" enctype = "multipart/form-data">
 						<div class="form-group">
 							<label for="">Account Name</label>
 							<?php if(isset($account)){
@@ -39,13 +41,25 @@ $account = getAccountforUpdate();
 								<?php foreach ($peoples as $people): ?>
 								<div>
 									<label class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" name="people[]" value="<?php echo $people['user_id']; ?>">
-										<span class="custom-control-indicator"></span>
-										<?php if ($people['user_name']):  ?>
-										<span class="custom-control-description"><?php echo $people['user_name']; ?>
-										<?php else: echo "Unknown - " . $people['email']; ?>
-										<?php endif; ?>
-										</span>
+										<?php 
+											for ($i=0; $i < count($orignalMembers); $i++) {
+												if($orignalMembers[$i]['user_id'] == $people['user_id']){
+													echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '" checked>';
+													echo '<span class="custom-control-indicator"></span>';
+													if ($people['user_name']){
+														echo '<span class="custom-control-description">' . $people["user_name"];
+													}else{ echo "Unknown - " . $people['email']; }
+													echo '</span>';
+												}else {
+													echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '">';
+													echo '<span class="custom-control-indicator"></span>';
+													if ($people['user_name']){
+														echo '<span class="custom-control-description">' . $people["user_name"];
+													}else{ echo "Unknown - " . $people['email']; }
+													echo '</span>';
+												}
+											}
+										?>
 									</label>
 								</div>
 								
