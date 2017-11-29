@@ -1,6 +1,10 @@
 <?php 
 include('resources/functions/functions.php');
 include('resources/include/head.php');
+if(isset($_SESSION['accUpdatePeopleError'])) {
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">' . $_SESSION['accUpdatePeopleError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
+	unset($_SESSION['accUpdatePeopleError']);
+}
 include('resources/include/header.php');
 $peoples = getPeoples();
 $currency = getCurrency();

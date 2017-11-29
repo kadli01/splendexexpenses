@@ -364,6 +364,20 @@ function getAccountMembersForUpdate(){
 	}else{ return false; }
 }
 
+function updateAccountPeople(){
+	if(isset($_POST['people'])){
+		$sql = $GLOBALS['db']->prepare("DELETE FROM users_accounts WHERE account_id = ?");
+				$sql->execute([$_GET['accountId']]);
+		foreach ($_POST['people'] as $person) {	
+			$sql = $GLOBALS['db']->prepare("INSERT INTO users_accounts(user_id, account_id) VALUES(?, ?)");
+			$sql->execute([$person, $_GET['accountId']]);
+		}
+	}else {
+		$_SESSION['accUpdatePeopleError'] = "Please choose people you want to be in this account!";
+		return false;
+	}
+}
+
 function updateAccountImage(){
 	include('config.php');
 	$targetDir = "public/uploads";
@@ -399,15 +413,14 @@ function updateAccountImage(){
 }
 
 function updateAccount(){
-	if(!$_POST['people']) {
-		$errorMessage = "Please select people"; 
-	}
-
 	//update accounts table
+	include('config.php');
 	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
 	$updateAccount->execute([$_POST['name'], $_POST['currency'], $_GET['accountId']]);
-	updateAccountImage();
-	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
 
+	updateAccountPeople();
+	updateAccountImage();
+	$_SESSION['successMessage'] = "Successfully updated account!";
+	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
 }
 if(isset($_POST['updateAccBtn'])) updateAccount();
