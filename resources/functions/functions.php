@@ -364,43 +364,50 @@ function getAccountMembersForUpdate(){
 	}else{ return false; }
 }
 
+function updateAccountImage(){
+	include('config.php');
+	$targetDir = "public/uploads";
+	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
+
+	var_dump($targetFile);
+	if (empty($_POST['name'])) {
+		$errorMessage = "Account Name is required.";
+	} else { 
+		$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
+	}
+	if (!empty($_POST['currency'])) {
+		$currency = $_POST['currency'];
+	}
+	if (!empty($_FILES['image']) && $_FILES['image']['size'] > 0) {
+		$image = $_FILES['image']['name'];
+		$fileExt=strtolower(end(explode('.',$image)));
+ 		$extensions= array("jpg", "jpeg", "png", "gif");
+  		if(!in_array($fileExt,$extensions)){
+     		$errorMessage = "Extension not allowed, please choose a JPG, JPEG, GIF or PNG file.";
+  		} elseif ($_FILES['image']['size'] > $config->maxFileSize) {
+  			$errorMessage = "Sorry, your file is too large.";
+  		} else {
+  			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+		         $updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET image = ? WHERE account_id = ?");
+				$updateAccount->execute([$image, $_GET['accountId']]);
+		    } else {
+		    	echo "string";
+		        $errorMessage = "Sorry, there was an error uploading your file.";
+		    }
+  		}
+	}
+}
+
 function updateAccount(){
 	if(!$_POST['people']) {
 		$errorMessage = "Please select people"; 
 	}
 
 	//update accounts table
-	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, image = ?, updated_at = NOW() WHERE account_id = ?");
-	$updateAccount->execute([$name, $_POST['currency'], $image, $_GET['accountId']]);
+	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
+	$updateAccount->execute([$_POST['name'], $_POST['currency'], $_GET['accountId']]);
+	updateAccountImage();
+	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
 
-	//header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
-}	
-
-if(isset($_POST['updateAccBtn'])) updateAccount();
-
-function updateAccountImage(){
-	include('config.php');
-	$targetDir = $config->app_url . "public/uploads";
-	if (empty($_POST['name'])) {
-		$errorMessage = "Account Name is required.";
-	} else { 
-		$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-	}
-	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
-	if (!empty($_FILES['image']) && $_FILES['image']['size'] > 0) {
-		$image = $_FILES['image']['name'];
-		$fileExt = strtolower(end(explode('.',$image)));
- 		$extensions = array("jpg", "jpeg", "png", "gif");
-  		if(!in_array($fileExt,$extensions)){
-     		$errorMessage = "Extension not allowed, please choose a JPG, JPEG, GIF or PNG file.";
-  		} elseif ($_FILES['image']['size'] > 5000000) {
-  			$errorMessage = "Sorry, your file is too large.";
-  		} else {
-  			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-		        //echo "The file ". basename( $_FILES['image']['name']). " has been uploaded.";
-		    } else {
-		        $errorMessage = "Sorry, there was an error uploading your file.";
-		    }
-  		}
-	}
 }
+if(isset($_POST['updateAccBtn'])) updateAccount();

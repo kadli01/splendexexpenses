@@ -2,9 +2,14 @@
 <?php 
 session_start();
 require('connection.php');
+var_dump($_FILES);
+
 if (isset($_POST['create'])) {
+	//$targetDir =  $config->app_url . "public/uploads";
 	$targetDir = "../../public/uploads";
 	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
+
+	var_dump($targetFile);
 	if (empty($_POST['name'])) {
 		$errorMessage = "Account Name is required.";
 	} else { 
