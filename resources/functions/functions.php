@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('connection.php');
+//include('csrf.php');
 
 //check if user is logged in
 function isLoggedIn(){
