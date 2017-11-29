@@ -18,6 +18,10 @@ $wow = whoOwesWhat();
 if (!array_key_exists($accId, $details)) {
 	header("location: " . $config->app_url . "/account.php");
 }
+if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
+
+
+
 ?>
 	<section class="account-show">
 		<div class="container">
@@ -31,7 +35,15 @@ if (!array_key_exists($accId, $details)) {
 								echo "http://via.placeholder.com/100x100";
 							}?>">
 							<br>
-							<?php echo '<a href="edit-account.php?accountId=' . $_GET['accountId'] . '" class="edit_account">Edit Account</a>'; ?>
+							<?php 
+							$isMember = false;
+							foreach ($members as $member) {
+								if ($member['user_id'] == $_SESSION['user_id']) {
+									$isMember = true;
+									echo '<a href="edit-account.php?accountId=' . $_GET['accountId'] . '" class="edit_account">Edit Account</a>';
+								}
+							} 
+							 ?>
 							<h3><?php echo $details[$accId]['account_name'];?></h3>
 							<span><?php 
 								if ($details[$accId]['currency'] === 'USD') {

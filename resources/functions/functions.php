@@ -2,6 +2,10 @@
 session_start();
 include('connection.php');
 
+/**
+ * check if the user is logged in
+ * @return boolean
+ */
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
         header('location:' . $config->app_url . '/index.php');
@@ -9,6 +13,10 @@ function isLoggedIn(){
     }
 }
 
+/**
+ * get the email of the user
+ * @return array
+ */
 function returnEmail(){
 	$email = $GLOBALS['db']->prepare("SELECT email FROM users WHERE user_id = ?");
     $email->execute([$_SESSION['user_id']]);
@@ -21,6 +29,10 @@ function returnEmail(){
     }
 }
 
+/**
+ * get the name of the user
+ * @return array
+ */
 function returnName(){
 	$userName = $GLOBALS['db']->prepare("SELECT user_name FROM users WHERE user_id = ?");
     $userName->execute([$_SESSION['user_id']]);
@@ -34,6 +46,10 @@ function returnName(){
     
 }
 
+/**
+ * update the users basic info
+ *
+ */
 function updateBasicInfo(){
 	if(isset($_POST['updateBasicBtn'])) {
 		//get all users information
@@ -56,9 +72,12 @@ function updateBasicInfo(){
 		}
 	}
 }
-if(isset($_POST['updateBasicBtn'])) updateBasicInfo();
+if(isset($_POST['updateBasicBtn'])) updateBasicInfo();//run updateBasicInfo function on button click
 
-
+/**
+ * update the users password
+ *
+ */
 function updatePassword() {
 	$password = $GLOBALS['db']->prepare("SELECT password FROM users WHERE user_id = ?");
     $password->execute([$_SESSION['user_id']]);
@@ -82,9 +101,15 @@ function updatePassword() {
     }
 }
 
-if(isset($_POST['updatePwdBtn'])) updatePassword();
+if(isset($_POST['updatePwdBtn'])) updatePassword(); //run updatePassword function on button click
 
-function getAccounts(){
+
+/**
+ * get accounts from db
+ * @param  int $accId
+ * @return array
+ */
+function getAccounts($accId = null){
 	$accountResult = $GLOBALS['db']->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
 									ON e.account_id = a.account_id
 									GROUP BY a.account_id");
@@ -103,6 +128,11 @@ function getAccounts(){
 
 }
 
+/**
+ * get the expenses for the accounts
+ * @param  int $accountId
+ * @return array
+ */
 function getExpenses($accountId){
 	$expense = $GLOBALS['db']->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ? ORDER BY e.created_at DESC");
 	$expense->execute([$accountId]);
@@ -116,7 +146,12 @@ function getExpenses($accountId){
 
 }
 
-function getPeoples($accId = null){
+/**
+ * 
+ *get all users' id username email from the db
+ * @return array
+ */
+function getPeoples(){
 	$peoplesResult = $GLOBALS['db']->prepare("SELECT user_id ,user_name, email FROM users");
     $peoplesResult->execute();
     $peoples = $peoplesResult->fetchAll(PDO::FETCH_ASSOC);
@@ -128,7 +163,12 @@ function getPeoples($accId = null){
     }
 }
 
-//get the members of the account from the db
+/**
+ * get the members of the account from the db
+ * 
+ * @param  int $accId
+ * @return array 
+ */
 function getMembers($accId){
 	$selectMembers = $GLOBALS['db']->prepare("SELECT * FROM users u JOIN users_accounts ua ON u.user_id = ua.user_id WHERE ua.account_id = ?");
     $selectMembers->execute([$accId]);
@@ -150,7 +190,13 @@ function getMembers($accId){
     }
 }
 
-//get the last expense the user paid for
+/**
+ * get the last expense the user paid for
+ * 
+ * @param  int $userId
+ * @param  int $accId
+ * @return array
+ */
 function getLastPaid($userId, $accId){
 	$selectLast = $GLOBALS['db']->prepare("SELECT * FROM expenses 
 								WHERE paid_by = ? && account_id = ?
@@ -166,7 +212,12 @@ function getLastPaid($userId, $accId){
     }
 
 }
-
+/**
+ * get the debts for certain expenses
+ * 
+ * @param  int $accId
+ * @return array
+ */
 function getDebt($accId = null){
 	$selecDebt = $GLOBALS['db']->prepare("SELECT e.account_id, p.expense_id, p.paid_by, p.paid_for, p.debt
 								FROM paid_for p 
@@ -182,7 +233,12 @@ function getDebt($accId = null){
     	return false;
     }
 }
-//get details of expenses
+/**
+ * get details of expenses
+ * 
+ * @param  int $expenseId
+ * @return array
+ */
 function getExpenseDetails($expenseId){
 	$selectDetails = $GLOBALS['db']->prepare("SELECT * FROM expenses WHERE expense_id = ?");
     $selectDetails->execute([$expenseId]);
@@ -195,7 +251,11 @@ function getExpenseDetails($expenseId){
     }
 }
 
-// get the currency of the account
+/**
+ * get the currency of the account
+ * 
+ * @return array ($ or HUF)
+ */
 function getCurrency() {
 	$currency = $GLOBALS['db']->prepare("SELECT currency FROM accounts WHERE account_id = ?");
 	$currency->execute([$_GET['accountId']]);
@@ -207,7 +267,10 @@ function getCurrency() {
     	return false;
     }
 }
-// insert new expense in the db
+/**
+ * insert new expense in the db
+ * 
+ */
 function newExpense() {
 	$paidBy = $_POST['paidBy'];
 	$members = getMembers($_GET['accountId']);
@@ -255,8 +318,14 @@ function newExpense() {
 		return false;
 	}
 }
-if(isset($_POST['createExpenseBtn'])) newExpense();
+if(isset($_POST['createExpenseBtn'])) newExpense(); //run newExpense function on button click
 
+/**
+ * get the balance of the user
+ * 
+ * @param  int $userId
+ * @return $debt int
+ */
 function getBalance($userId){
 	$selectPaid = $GLOBALS['db']->prepare("SELECT sum(pf.debt) FROM expenses e
 								LEFT JOIN paid_for pf
@@ -282,7 +351,14 @@ function getBalance($userId){
 	} else { return 0; }
 }
 	
-
+/*
+*
+*get data for the paid for section in expense-show.php
+*
+*@param int $expenseId
+*@ return array with data required in expense-show.php
+*
+*/
 function getPaidFor($expenseId) {
 	$details = $GLOBALS['db']->prepare("SELECT pf.paid_for, u.user_name, pf.debt, u.email FROM paid_for pf LEFT JOIN users u ON pf.paid_for = u.user_id WHERE expense_id = ?");
 	$details->execute([$expenseId]);
@@ -295,8 +371,11 @@ function getPaidFor($expenseId) {
     }
 }
 
+
 /**
 *
+*get data for the who owes what section on show.php
+*@return array with the data required for the who owes what section of show.php
 */
 function whoOwesWhat(){
 	$selectWow = $GLOBALS['db']->prepare("SELECT u.email, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
@@ -333,6 +412,11 @@ function whoOwesWhat(){
     }
 }
 
+/*
+*
+*Remove debts from paid_for table
+*
+*/
 function settleDebt(){
 	$sql = $GLOBALS['db']->prepare("DELETE FROM paid_for WHERE paid_for = ? AND paid_by = ?");
 	$sql->execute([$_POST['paidFor'], $_POST['paidBy']]);
@@ -341,8 +425,13 @@ function settleDebt(){
 	$sql->execute([$_POST['expense_id']]);	
 }
 
-if(isset($_POST['settleYesBtn'])) settleDebt();
+if(isset($_POST['settleYesBtn'])) settleDebt(); //run settleDebt function on button click
 
+/*
+*
+*Get the account's name to show on update page
+*
+*/
 function getAccountforUpdate(){
 	$account = $GLOBALS['db']->prepare("SELECT account_name FROM accounts WHERE account_id = ?");
 	$account->execute([$_GET['accountId']]);
@@ -351,7 +440,12 @@ function getAccountforUpdate(){
 		return $accountName;
 	}else{ return false; }
 }
-//gets the members of the account - shown in edit-account.php
+
+/*
+*
+*gets the members of the account - shown in edit-account.php
+*
+*/
 function getAccountMembersForUpdate(){
 	$members = $GLOBALS['db']->prepare("SELECT ua.user_id, u.user_name, u.email FROM users_accounts ua LEFT JOIN users u ON ua.user_id = u.user_id  WHERE account_id = ?");
 	$members->execute([$_GET['accountId']]);
@@ -361,6 +455,11 @@ function getAccountMembersForUpdate(){
 	}else{ return false; }
 }
 
+/*
+*
+*update the members for the account
+*
+*/
 function updateAccountPeople(){
 	if(isset($_POST['people'])){
 		$sql = $GLOBALS['db']->prepare("DELETE FROM users_accounts WHERE account_id = ?");
@@ -408,15 +507,18 @@ function updateAccountImage(){
   		}
 	}
 }
-
+/*
+*
+*update accounts table
+*
+*/
 function updateAccount(){
-	//update accounts table
 	include('config.php');
 	if(!empty(trim($_POST['name']))){
 		$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
 		$updateAccount->execute([trim($_POST['name']), $_POST['currency'], $_GET['accountId']]);
 
-		updateAccountPeople();
+		updateAccountPeople();//
 		updateAccountImage();
 		$_SESSION['successMessage'] = "Successfully updated account!";
 		header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
