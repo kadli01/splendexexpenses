@@ -38,11 +38,13 @@ var_dump($orignalMembers);
 						<div class="form-group">
 							<label for="">People</label>
 							<div class="create__checkbox">
-								<?php foreach ($peoples as $people): ?>
+								<?php 
+								$i = 0;
+								foreach ($peoples as $key => $people): ?>
 								<div>
 									<label class="custom-control custom-checkbox">
-										<?php 
-											for ($i=0; $i < count($orignalMembers); $i++) {
+										<?php //zsoca
+											//for ($i=0; $i < count($orignalMembers); $i++) {
 												if($orignalMembers[$i]['user_id'] == $people['user_id']){
 													echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '" checked>';
 													echo '<span class="custom-control-indicator"></span>';
@@ -58,11 +60,11 @@ var_dump($orignalMembers);
 													}else{ echo "Unknown - " . $people['email']; }
 													echo '</span>';
 												}
-											}
+											//zsocaend}
 										?>
 									</label>
 								</div>
-								
+								<?php $i++; ?>
 								<?php endforeach; ?>
 
 							</div>
