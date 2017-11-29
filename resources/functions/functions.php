@@ -346,8 +346,9 @@ function getAccountforUpdate(){
 		return $accountName;
 	}else{ return false; }
 }
+//gets the members of the account - shown in edit-account.php
 function getAccountMembersForUpdate(){
-	$members = $GLOBALS['db']->prepare("SELECT ua.user_id FROM users_accounts ua WHERE account_id = ?");
+	$members = $GLOBALS['db']->prepare("SELECT ua.user_id, u.user_name, u.email FROM users_accounts ua LEFT JOIN users u ON ua.user_id = u.user_id  WHERE account_id = ?");
 	$members->execute([$_GET['accountId']]);
 	$membersItems = $members->fetchAll(PDO::FETCH_ASSOC);
 	if(isset($membersItems)){
@@ -355,4 +356,43 @@ function getAccountMembersForUpdate(){
 	}else{ return false; }
 }
 
-if(isset($_POST['updateAccBtn'])) getAccountMembersForUpdate();
+function updateAccount(){
+	if(!$_POST['people']) {
+		$errorMessage = "Please select people"; 
+	}
+
+	//update accounts table
+	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, image = ?, updated_at = NOW() WHERE account_id = ?");
+	$updateAccount->execute([$name, $_POST['currency'], $image, $_GET['accountId']]);
+
+	//header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
+}	
+
+if(isset($_POST['updateAccBtn'])) updateAccount();
+
+function updateAccountImage(){
+	include('config.php');
+	$targetDir = $config->app_url . "public/uploads";
+	if (empty($_POST['name'])) {
+		$errorMessage = "Account Name is required.";
+	} else { 
+		$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
+	}
+	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
+	if (!empty($_FILES['image']) && $_FILES['image']['size'] > 0) {
+		$image = $_FILES['image']['name'];
+		$fileExt = strtolower(end(explode('.',$image)));
+ 		$extensions = array("jpg", "jpeg", "png", "gif");
+  		if(!in_array($fileExt,$extensions)){
+     		$errorMessage = "Extension not allowed, please choose a JPG, JPEG, GIF or PNG file.";
+  		} elseif ($_FILES['image']['size'] > 5000000) {
+  			$errorMessage = "Sorry, your file is too large.";
+  		} else {
+  			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+		        //echo "The file ". basename( $_FILES['image']['name']). " has been uploaded.";
+		    } else {
+		        $errorMessage = "Sorry, there was an error uploading your file.";
+		    }
+  		}
+	}
+}

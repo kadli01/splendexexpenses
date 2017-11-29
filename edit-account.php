@@ -6,7 +6,6 @@ $peoples = getPeoples();
 $currency = getCurrency();
 $account = getAccountforUpdate();
 $orignalMembers = getAccountMembersForUpdate();
-var_dump($orignalMembers);	
 ?>
 
 <section class="create form">
@@ -25,7 +24,8 @@ var_dump($orignalMembers);
 							<label for="">Currency</label>
 							<select name="currency" id="currency" class="form-control">
 								<?php
-								if($currency == 'HUF'){
+
+								if($currency['currency'] == 'HUF'){
 									echo '<option value="HUF" selected>HUF (Ft)</option>';
 									echo '<option value="USD">USD ($)</option>';
 								}else{
@@ -38,30 +38,27 @@ var_dump($orignalMembers);
 						<div class="form-group">
 							<label for="">People</label>
 							<div class="create__checkbox">
-								<?php 
-								$i = 0;
-								foreach ($peoples as $key => $people): ?>
+								<?php $i=0; ?>
+								<?php foreach ($peoples as $people): ?>
 								<div>
-									<label class="custom-control custom-checkbox">
-										<?php //zsoca
-											//for ($i=0; $i < count($orignalMembers); $i++) {
-												if($orignalMembers[$i]['user_id'] == $people['user_id']){
-													echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '" checked>';
-													echo '<span class="custom-control-indicator"></span>';
-													if ($people['user_name']){
+									<label class="custom-control custom-checkbox">				
+										<?php 
+										if (in_array($people, $orignalMembers)) {		
+											echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '" checked>';
+											echo '<span class="custom-control-indicator"></span>';
+											if ($people['user_name']){
 														echo '<span class="custom-control-description">' . $people["user_name"];
-													}else{ echo "Unknown - " . $people['email']; }
-													echo '</span>';
-												}else {
-													echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '">';
-													echo '<span class="custom-control-indicator"></span>';
-													if ($people['user_name']){
-														echo '<span class="custom-control-description">' . $people["user_name"];
-													}else{ echo "Unknown - " . $people['email']; }
-													echo '</span>';
-												}
-											//zsocaend}
-										?>
+											}else{ 
+												echo "Unknown - " . $people['email']; }
+												echo '</span>';
+										}else {
+											echo '<input type="checkbox" class="custom-control-input" name="people[]" value="' . $people['user_id'] . '">';
+											echo '<span class="custom-control-indicator"></span>';
+											if ($people['user_name']){
+												echo '<span class="custom-control-description">' . $people["user_name"];
+											}else{ echo "Unknown - " . $people['email']; }
+											echo '</span>';
+												} ?>
 									</label>
 								</div>
 								<?php $i++; ?>
