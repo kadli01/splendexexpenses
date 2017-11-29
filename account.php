@@ -53,9 +53,14 @@ if (!empty($_SESSION['createError'])) {
 								<div class="content__icons">
 									<?php $members = getMembers($account['account_id']); 
 									$i = 0;
-									foreach ($members as $member): ?>
-									<i class="fa fa-user"></i>
-									<?php endforeach; ?>
+									foreach ($members as $member){
+										$i++;
+										if ($i<=3){
+											echo '<i class="fa fa-user"></i>';
+										} else { 
+											echo '<i class="fa">+</i>';
+										}
+									}?>
 									<!-- <i class="fa fa-user"></i> -->
 									<!-- <i class="fa fa-user"></i> -->
 								</div>
