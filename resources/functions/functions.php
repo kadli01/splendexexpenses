@@ -2,14 +2,13 @@
 session_start();
 include('connection.php');
 
-//check if user is logged in
 function isLoggedIn(){
     if(!isset($_SESSION['user_id']) && $_SESSION['is_logged_in'] == false){
         header('location:' . $config->app_url . '/index.php');
         exit();
     }
 }
-//get the users email adress from the db
+
 function returnEmail(){
 	$email = $GLOBALS['db']->prepare("SELECT email FROM users WHERE user_id = ?");
     $email->execute([$_SESSION['user_id']]);
@@ -20,9 +19,8 @@ function returnEmail(){
     }else{
     	return false;
     }
-
 }
-//get the username of the user from the db
+
 function returnName(){
 	$userName = $GLOBALS['db']->prepare("SELECT user_name FROM users WHERE user_id = ?");
     $userName->execute([$_SESSION['user_id']]);
@@ -36,7 +34,6 @@ function returnName(){
     
 }
 
-// update the Basic Info of the user
 function updateBasicInfo(){
 	if(isset($_POST['updateBasicBtn'])) {
 		//get all users information
@@ -61,7 +58,7 @@ function updateBasicInfo(){
 }
 if(isset($_POST['updateBasicBtn'])) updateBasicInfo();
 
-//update the password of the user
+
 function updatePassword() {
 	$password = $GLOBALS['db']->prepare("SELECT password FROM users WHERE user_id = ?");
     $password->execute([$_SESSION['user_id']]);
@@ -87,13 +84,11 @@ function updatePassword() {
 
 if(isset($_POST['updatePwdBtn'])) updatePassword();
 
-//get the accounts from the db
-function getAccounts($accId = null){
+function getAccounts(){
 	$accountResult = $GLOBALS['db']->prepare("SELECT a.*, SUM(e.amount) FROM accounts a LEFT JOIN expenses e
 									ON e.account_id = a.account_id
-									GROUP BY a.account_id
-									/*HAVING a.account_id = ?*/");
-	$accountResult->execute(/*[$accId]*/);
+									GROUP BY a.account_id");
+	$accountResult->execute();
 	$accounts = $accountResult->fetchAll(PDO::FETCH_ASSOC);
 	foreach ($accounts as $key => $value) {
 		unset($accounts[$key]);
@@ -108,7 +103,6 @@ function getAccounts($accId = null){
 
 }
 
-//get the expenses for the accounts
 function getExpenses($accountId){
 	$expense = $GLOBALS['db']->prepare("SELECT e.*, u.user_name FROM expenses e LEFT JOIN users u ON e.paid_by = u.user_id WHERE account_id = ? ORDER BY e.created_at DESC");
 	$expense->execute([$accountId]);
@@ -242,7 +236,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
@@ -301,6 +295,9 @@ function getPaidFor($expenseId) {
     }
 }
 
+/**
+*
+*/
 function whoOwesWhat(){
 	$selectWow = $GLOBALS['db']->prepare("SELECT u.email, u.user_name, pf.paid_by, pf.paid_for ,sum(pf.debt) 
                                 FROM paid_for pf 
@@ -377,13 +374,13 @@ function updateAccountPeople(){
 		return false;
 	}
 }
-
+/**
+*Uploads the the new image file to the uploads folder and updates the database
+*/
 function updateAccountImage(){
 	include('config.php');
 	$targetDir = "public/uploads";
 	$targetFile = $targetDir . "/" . $_FILES['image']['name'];
-
-	var_dump($targetFile);
 	if (empty($_POST['name'])) {
 		$errorMessage = "Account Name is required.";
 	} else { 
@@ -402,10 +399,11 @@ function updateAccountImage(){
   			$errorMessage = "Sorry, your file is too large.";
   		} else {
   			if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-		         $updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET image = ? WHERE account_id = ?");
+		        $updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET image = ? WHERE account_id = ?");
 				$updateAccount->execute([$image, $_GET['accountId']]);
 		    } else {
 		        $errorMessage = "Sorry, there was an error uploading your file.";
+		        return false;
 		    }
   		}
 	}

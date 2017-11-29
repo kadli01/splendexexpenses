@@ -9,7 +9,7 @@ if(isset($_SESSION['successMessage'])) {
 }
 include('resources/include/header.php');
 $expenses = getExpenses($_GET['accountId']);
-$details = getAccounts($_GET['accountId']);
+$details = getAccounts(/*$_GET['accountId']*/);
 $members = getMembers($_GET['accountId']);
 $currency = getCurrency();	
 $accId = $_GET['accountId'];
@@ -196,10 +196,14 @@ if (!array_key_exists($accId, $details)) {
 												}
 											}
 											if(!$wow){
-												if ($isMember) {
-													echo '<p>There are no expenses in this account yet. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
-												}else{
-													echo '<p>There are no expenses in this account yet. You dont have permission to add one.</p><br>';
+												if (!$expenses) {
+													if ($isMember) {
+														echo '<p>There are no expenses in this account yet. Please <a href="new-expense.php?accountId=' . $_GET['accountId'] . '">click here</a> to add one!</p><br>';
+													}else{
+														echo '<p>There are no expenses in this account yet. You dont have permission to add one.</p><br>';
+													}
+												} else {
+													echo '<p>Woohoo! Every expense is settled in this account.</p>';
 												}
 											}
 											 ?>

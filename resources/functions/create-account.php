@@ -51,7 +51,7 @@ if (isset($_POST['create'])) {
 				$errorMessage = "Error"; 
 			}
 		} catch (Exception $e) {
-			echo $e->getMessage();
+			$errorMessage = "ERROR";
 		}
 	}
 	if (!isset($errorMessage)) {
