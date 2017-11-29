@@ -3,9 +3,9 @@ include('resources/include/head.php');
 include('resources/functions/functions.php'); 
 isLoggedIn();
 
-if(isset($_SESSION['successMessage'])) {
-	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">' . $_SESSION['successMessage'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
-	unset($_SESSION['successMessage']);
+if(isset($_SESSION['createError'])) {
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">' . $_SESSION['createError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
+	unset($_SESSION['createError']);
 }
 include('resources/include/header.php');
 $expenses = getExpenses($_GET['accountId']);

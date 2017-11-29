@@ -15,11 +15,16 @@ $account = getAccountforUpdate();
 $orignalMembers = getAccountMembersForUpdate();
 if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
 
+$isMember = false;
 foreach ($members as $member) {
-	if($_SESSION['user_id'] != $member['user_id']){
-		header("location: " . $config->app_url . "/account.php");
+	if ($member['user_id'] == $_SESSION['user_id']) {
+		$isMember = true;
 	}
 }
+if (!$isMember) {
+	header("location: " . $config->app_url . "/account.php");
+}
+
 ?>
 
 <section class="create form">

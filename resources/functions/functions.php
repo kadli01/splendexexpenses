@@ -519,7 +519,7 @@ function updateAccount(){
 
 		updateAccountPeople();//
 		updateAccountImage();
-		$_SESSION['successMessage'] = "Successfully updated account!";
+		$_SESSION['createError'] = "Successfully updated account!";
 		header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
 	}else {
 		$_SESSION['accUpdateNameError'] = "Account Name is required!";
