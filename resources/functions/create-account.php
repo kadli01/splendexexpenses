@@ -2,7 +2,9 @@
 <?php 
 session_start();
 require('connection.php');
-
+/**
+ * Creates a new account
+ */
 if (isset($_POST['create'])) {
 	//$targetDir =  $config->app_url . "public/uploads";
 	$targetDir = "../../public/uploads";
@@ -64,6 +66,11 @@ if (isset($_POST['create'])) {
 
 }
 
+/**
+ * Adds people to the created account
+ * 
+ * @param Int $accId
+ */
 function addPeople($accId){
 	require('connection.php');
 	$result = array();

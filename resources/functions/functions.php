@@ -308,7 +308,6 @@ function newExpense() {
 				$_SESSION['expenseError'] = $expenseError;
 				return false;
 		}	
-
 	} elseif(!isset($expenseError) ) {
 		$expenseError = "You need to fill out all fields!";
 		$_SESSION['expenseError'] = $expenseError;

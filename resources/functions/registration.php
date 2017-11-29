@@ -1,6 +1,9 @@
 <?php
 include "connection.php";
 session_start();
+/**
+ * Creates a new user
+ */
 if (isset($_POST['signup'])) {
 	var_dump($_POST);
 	if (!$_POST["regEmail"] && !$_POST["regPassword"] && !$_POST["regPasswordAgain"]) {
