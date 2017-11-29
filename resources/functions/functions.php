@@ -45,13 +45,13 @@ function updateBasicInfo(){
     	$userDataItems = $userData->fetchAll(PDO::FETCH_ASSOC);
 
     	foreach ($userDataItems as $ud) {
-			if(!empty($_POST['name']) && $_POST['email'] == $ud['email']){
+			if(!empty(trim($_POST['name'])) && $_POST['email'] == $ud['email']){
 				$updateBasic = $GLOBALS['db']->prepare("UPDATE users SET user_name = ?, email = ? WHERE user_id = ?");
 				$updateBasic->execute([$_POST['name'], $_POST['email'], $_SESSION['user_id']]);
 
 				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-success alert-dismissable">Basic Info updated successfully!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
 					
-			}elseif(empty($_POST['name'])){
+			}elseif(empty(trim($_POST['name']))){
 				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The name field must be filled out!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
 			}else{
 				echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">The email address you provided is already in use!<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';
@@ -233,7 +233,7 @@ function newExpense() {
 	if ($_POST['amount'] <= 0 ) {
 		$expenseError = "All numbers must be greater than 0";
 	}
-	if($_POST['amount'] && $_POST['paidBy'] && $_POST['expenseName'] && $_POST['datepicker'] && !isset($expenseError)) {
+	if($_POST['amount'] && $_POST['paidBy'] && !empty(trim($_POST['expenseName'])) && $_POST['datepicker'] && !isset($expenseError)) {
 		$createdAt = $_POST['datepicker'];
 		if ($total == $_POST['amount']) {
 			$expense = $GLOBALS['db']->prepare("INSERT INTO expenses(account_id, expense_name, amount, paid_by, expense_date, created_at, updated_at) VALUES(?, ?, ?, ?, ?, NOW(), NOW())");
@@ -242,7 +242,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
@@ -421,6 +421,6 @@ function updateAccount(){
 	updateAccountPeople();
 	updateAccountImage();
 	$_SESSION['successMessage'] = "Successfully updated account!";
-	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
+	header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
 }
 if(isset($_POST['updateAccBtn'])) updateAccount();
