@@ -242,7 +242,7 @@ function newExpense() {
 			foreach ($_POST['paidFor'] as $key => $value) {
 				$paidFor = $GLOBALS['db']->prepare("INSERT INTO paid_for(expense_id, paid_for, debt, paid_by) VALUES(?, ?, ?, ?)");
 				$paidFor->execute([$expenseId, $key, $value, $_POST['paidBy']]);
-				header('Location:' . $config->app_url . 'show.php?accountId=' . $_GET["accountId"] . '');
+				header('Location:' . $config->app_url . '/show.php?accountId=' . $_GET["accountId"] . '');
 				$_SESSION['successMessage'] = 'Expense successfully added to account!';
 			}
 
@@ -405,7 +405,6 @@ function updateAccountImage(){
 		         $updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET image = ? WHERE account_id = ?");
 				$updateAccount->execute([$image, $_GET['accountId']]);
 		    } else {
-		    	echo "string";
 		        $errorMessage = "Sorry, there was an error uploading your file.";
 		    }
   		}
@@ -414,12 +413,17 @@ function updateAccountImage(){
 function updateAccount(){
 	//update accounts table
 	include('config.php');
-	$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
-	$updateAccount->execute([$_POST['name'], $_POST['currency'], $_GET['accountId']]);
+	if(!empty(trim($_POST['name']))){
+		$updateAccount = $GLOBALS['db']->prepare("UPDATE accounts SET account_name = ?, currency = ?, updated_at = NOW() WHERE account_id = ?");
+		$updateAccount->execute([trim($_POST['name']), $_POST['currency'], $_GET['accountId']]);
 
-	updateAccountPeople();
-	updateAccountImage();
-	$_SESSION['successMessage'] = "Successfully updated account!";
-	header('location:' . $config->app_url . 'show.php?accountId=' . $_GET['accountId']);
+		updateAccountPeople();
+		updateAccountImage();
+		$_SESSION['successMessage'] = "Successfully updated account!";
+		header('location:' . $config->app_url . '/show.php?accountId=' . $_GET['accountId']);
+	}else {
+		$_SESSION['accUpdateNameError'] = "Account Name is required!";
+		return false;
+	}
 }
 if(isset($_POST['updateAccBtn'])) updateAccount();

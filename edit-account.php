@@ -4,6 +4,9 @@ include('resources/include/head.php');
 if(isset($_SESSION['accUpdatePeopleError'])) {
 	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">' . $_SESSION['accUpdatePeopleError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
 	unset($_SESSION['accUpdatePeopleError']);
+}elseif(isset($_SESSION['accUpdateNameError'])){
+	echo '<div style="margin-bottom: 0px; text-align: center;" class="alert alert-danger alert-dismissable">' . $_SESSION['accUpdateNameError'] . '<a href="" class="close" data-dismiss="alert" aria-label="close">×</a></div>';	
+	unset($_SESSION['accUpdateNameError']);
 }
 include('resources/include/header.php');
 $peoples = getPeoples();
@@ -74,6 +77,7 @@ $orignalMembers = getAccountMembersForUpdate();
 							<label for="">Upload Cover Image</label>
 							<input type="file" name="image" accept="image/*">
 						</div>
+
 						<input type="submit" name="updateAccBtn" value="Update" class="btn btn-primary">
 					</form>
 				</div>
