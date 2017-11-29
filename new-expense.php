@@ -1,6 +1,7 @@
 <?php 
 include('resources/include/head.php'); 
 include('resources/functions/functions.php'); 
+
 isLoggedIn();
 $accounts = getAccounts();
 $currency = getCurrency();
@@ -43,7 +44,7 @@ if (!$isMember) {
 							</div>
 							<div class="form-group">
 								<label for="amount">Amount</label>
-								<input name="amount" step="0.5" type="number" class="form-control" value="<?php if(isset($_POST['amount'])) echo $_POST['amount']; ?>" min="0">
+								<input name="amount" step="0.5" type="number" class="form-control" value="<?php if(isset($_POST['amount'])) echo $_POST['amount']; ?>" >
 							</div>
 							<div class="form-group">
 								<label for="date">Date</label>
