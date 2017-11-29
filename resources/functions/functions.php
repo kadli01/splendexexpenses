@@ -410,6 +410,7 @@ function updateAccountImage(){
   		}
 	}
 }
+
 function updateAccount(){
 	//update accounts table
 	include('config.php');
