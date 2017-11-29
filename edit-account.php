@@ -13,6 +13,13 @@ $peoples = getPeoples();
 $currency = getCurrency();
 $account = getAccountforUpdate();
 $orignalMembers = getAccountMembersForUpdate();
+if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
+
+foreach ($members as $member) {
+	if($_SESSION['user_id'] != $member['user_id']){
+		header("location: " . $config->app_url . "/account.php");
+	}
+}
 ?>
 
 <section class="create form">

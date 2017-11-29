@@ -19,9 +19,6 @@ if (!array_key_exists($accId, $details)) {
 	header("location: " . $config->app_url . "/account.php");
 }
 if(isset($_GET['accountId'])) $members = getMembers($_GET['accountId']);
-
-
-
 ?>
 	<section class="account-show">
 		<div class="container">
